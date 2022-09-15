@@ -14,8 +14,8 @@ export default function Nav({ user }) {
   return (
     <Navbar
       style={{
-        backgroundColor: "rgb(31 41 55)",
-        color: "white",
+        backgroundColor: "white",
+        color: "black",
         position: "sticky",
         top: 0,
         zIndex: 100,
@@ -29,22 +29,6 @@ export default function Nav({ user }) {
           alt="Brofiber Logo"
         />
       </Navbar.Brand>
-      <div className="flex md:order-2">
-        <TextInput
-          onChange={handleChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              GetData();
-            }
-          }}
-          id="search"
-          type="text"
-          placeholder="Zoeken..."
-          required={true}
-        />
-
-        <Navbar.Toggle />
-      </div>
 
       <Navbar.Collapse>
         <Navbar.Link style={{ color: "white" }} href="/" active={true}>
