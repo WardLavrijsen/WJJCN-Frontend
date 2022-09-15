@@ -1,72 +1,36 @@
-import axios from "axios";
-
+/* eslint-disable @next/next/no-img-element */
 import { Navbar, TextInput } from "flowbite-react";
 
-import { useRouter } from "next/router";
-
 export default function Nav({ user }) {
-  const router = useRouter();
-
-  const handleLogOut = async () => {
-    const user = await axios.get("/api/auth/logout");
-    router.push("/login");
-  };
+  const handleLogOut = () => {};
   return (
     <Navbar
       style={{
-        backgroundColor: "rgb(31 41 55)",
-        color: "white",
+        backgroundColor: "white",
+        color: "black",
         position: "sticky",
         top: 0,
         zIndex: 100,
+        padding: "1rem 2rem",
+        borderBottom: "5px solid rgba(0, 0, 0, 0.3)",
       }}
       fluid={true}
     >
       <Navbar.Brand href="/">
         <img
-          src="/logo-wit.png"
-          className="mr-3 h-6 sm:h-9"
+          src="/images/logo.png"
+          className="mr-3 h-12 sm:h-12"
           alt="Brofiber Logo"
         />
       </Navbar.Brand>
-      <div className="flex md:order-2">
-        <TextInput
-          onChange={handleChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              GetData();
-            }
-          }}
-          id="search"
-          type="text"
-          placeholder="Zoeken..."
-          required={true}
-        />
 
-        <Navbar.Toggle />
-      </div>
+      <Navbar.Toggle />
 
       <Navbar.Collapse>
-        <Navbar.Link style={{ color: "white" }} href="/" active={true}>
+        <Navbar.Link href="/" active={true}>
           Home
         </Navbar.Link>
-        <Navbar.Link style={{ color: "white" }} href="/aanmelding/toevoegen">
-          Aanmelding Toevoegen
-        </Navbar.Link>
-        <Navbar.Link style={{ color: "white" }} href="/adres">
-          Adres
-        </Navbar.Link>
-        <Navbar.Link style={{ color: "white" }} href="/acties">
-          Acties
-        </Navbar.Link>
-        <Navbar.Link style={{ color: "white" }} href="/finance">
-          Financieel
-        </Navbar.Link>
-        <Navbar.Link
-          style={{ color: "white" }}
-          href="#"
-          onClick={() => handleLogOut()}
-        >
+        <Navbar.Link href="#" onClick={() => handleLogOut()}>
           Log Out
         </Navbar.Link>
       </Navbar.Collapse>
