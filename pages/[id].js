@@ -5,8 +5,12 @@ import Nav from "../components/navbar";
 import BrandCard from "../components/brandCard";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Home({ brands }) {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <div className={styles.container}>
       <Head>
