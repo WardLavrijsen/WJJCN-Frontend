@@ -10,11 +10,12 @@ export default async function AllBrands(req, res) {
         headers: {
           "x-api-key": "tk5MO5jZjh4szZkROdZ9I5IFQiSb0tmY34uQ6VTg",
         },
-        body: {
-          name: "Red Bull",
+        data: {
+          name: req.query.name,
         },
       }
     );
+
     const data = JSON.parse(resonse.data);
     res.status(200).json({ status: "ok", data });
   } catch (error) {

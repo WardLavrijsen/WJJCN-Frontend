@@ -12,8 +12,8 @@ export default async function AllBrands(req, res) {
         },
       }
     );
-    const data = JSON.parse(resonse.data);
-    res.status(200).json({ status: "ok", data });
+    // const data = JSON.parse(resonse.data);
+    res.status(200).json({ status: "ok", data: resonse.data });
   } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
   }
