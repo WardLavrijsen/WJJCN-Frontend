@@ -10,8 +10,41 @@
 
 .cardGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 50px;
+}
+
+.brandTitle {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 1rem;
+  padding: 1rem 8rem 1rem 2rem;
+}
+.brand {
+  font-size: 1.7rem;
+  font-weight: 300;
+  padding: 1.25rem;
+  padding: 1rem 8rem 1rem 2rem;
+}
+
+.active {
+  background-color: #f4f8fb;
+  color: #3a87e9;
+  font-weight: 500;
+  background-clip: unset;
+  padding: 2rem 8rem 2rem 2rem;
+}
+
+.brandList {
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .footer {

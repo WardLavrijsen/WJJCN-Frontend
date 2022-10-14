@@ -23,10 +23,17 @@ export default function Home({ brands, error }) {
             <h2>Probeer later opnieuw</h2>
           </div>
         ) : (
-          <div className={styles.cardGrid}>
+          <div className={styles.brandList}>
+            <h1 className={styles.brandTitle}>Brands:</h1>
             {brands.map((brand) => (
-              <a href={"/" + brand} key={brand}>
-                <BrandCard key={brand} brand={brand} />
+              <a
+                className={`${styles.brand} ${
+                  brand == "Red Bull" ? styles.active : null
+                }`}
+                href={"/" + brand}
+                key={brand}
+              >
+                {brand}
               </a>
             ))}
           </div>

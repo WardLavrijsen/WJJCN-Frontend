@@ -11,8 +11,6 @@ export default function Home({ brands, error }) {
   const router = useRouter();
   const { id } = router.query;
 
-  console.log(brands);
-
   return (
     <div className={styles.container}>
       <Head>
