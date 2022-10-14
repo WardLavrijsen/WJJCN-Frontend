@@ -2,9 +2,17 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Nav from "../components/navbar";
-import BrandCard from "../components/brandCard";
+import { Card } from "flowbite-react";
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Home({ brands, error }) {
+  const router = useRouter();
+  const { id } = router.query;
+
+  console.log(brands);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -25,8 +33,22 @@ export default function Home({ brands, error }) {
         ) : (
           <div className={styles.cardGrid}>
             {brands.map((brand) => (
-              <a href={"/" + brand} key={brand}>
-                <BrandCard key={brand} brand={brand} />
+              <a href={"/" + brand.brand} key={brand._id["$oid"]}>
+                <div className="max-w-sm">
+                  <Card imgSrc="https://flowbite.com/docs/images/blog/image-1.jpg">
+                    <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                      {brand.retailers}
+                    </h5>
+                    {brand.products.map((product) => (
+                      <h5
+                        key={product.name}
+                        className=" text-gray-900 dark:text-white"
+                      >
+                        {product.name}
+                      </h5>
+                    ))}
+                  </Card>
+                </div>
               </a>
             ))}
           </div>
@@ -39,7 +61,9 @@ export default function Home({ brands, error }) {
 export async function getServerSideProps(context) {
   const url = context.req.headers.host;
   try {
-    const res = await fetch(`http://${url}/api/allbrands`);
+    const res = await fetch(
+      `http://${url}/api/retailerbybrand?name=${context.query.id}`
+    );
     const data = await res.json();
     if (data.status === "error") {
       return {
@@ -54,7 +78,7 @@ export async function getServerSideProps(context) {
     }
   } catch (error) {
     return {
-      props: { brands: null, error: error },
+      error: error,
     };
   }
 }

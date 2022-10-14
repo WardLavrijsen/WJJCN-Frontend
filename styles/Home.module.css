@@ -1,11 +1,17 @@
 .main {
   min-height: 100%;
+  width: 100vw;
   padding: 4rem 0;
   flex: 1;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-content: center;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 50px;
 }
 
 .footer {
