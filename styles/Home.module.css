@@ -3,6 +3,7 @@
   width: 100vw;
   padding: 4rem 0;
   flex: 1;
+  gap: 30px;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -25,7 +26,16 @@
   font-size: 1.7rem;
   font-weight: 300;
   padding: 1.25rem;
+  padding: 2rem 8rem 2rem 2rem;
+  text-align: left;
+}
+
+.product {
+  font-size: 1.2rem;
+  font-weight: 300;
+  padding: 1.25rem;
   padding: 1rem 8rem 1rem 2rem;
+  text-align: left;
 }
 
 .active {
@@ -33,14 +43,12 @@
   color: #3a87e9;
   font-weight: 500;
   background-clip: unset;
-  padding: 2rem 8rem 2rem 2rem;
 }
 
 .brandList {
   padding: 2rem 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   transition: all 0.2s ease-in-out;

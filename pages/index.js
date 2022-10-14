@@ -3,8 +3,27 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Nav from "../components/navbar";
 import BrandCard from "../components/brandCard";
+import { useState } from "react";
 
-export default function Home({ brands, error }) {
+export default function Home({
+  selectedBrand,
+  selectedPage,
+  brandData,
+  alldata,
+  error,
+}) {
+  const [brands, setBrands] = useState(brandData);
+  const [allData, setAllData] = useState([]);
+  console.log(allData);
+
+  const [currentBrand, setCurrentBrand] = useState(selectedBrand);
+  const [currentPage, setCurrentPage] = useState(selectedPage);
+
+  const changeUrl = (brand) => {
+    const search = `?brand=${brand.replace(" ", "-")}`;
+    history.pushState(null, "", location.origin + search);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -26,28 +45,64 @@ export default function Home({ brands, error }) {
           <div className={styles.brandList}>
             <h1 className={styles.brandTitle}>Brands:</h1>
             {brands.map((brand) => (
-              <a
+              <button
                 className={`${styles.brand} ${
-                  brand == "Red Bull" ? styles.active : null
+                  brand == currentBrand ? styles.active : null
                 }`}
-                href={"/" + brand}
+                onClick={() => {
+                  setCurrentBrand(brand);
+                  changeUrl(brand);
+                  setAllData(
+                    alldata.filter((data) => {
+                      return data.brand === currentBrand;
+                    })
+                  );
+                }}
                 key={brand}
               >
                 {brand}
-              </a>
+              </button>
             ))}
           </div>
         )}
+        {allData.map((brand) => (
+          <div className={styles.brandList} key={brand.brand + brand.retailers}>
+            <h1 className={styles.brandTitle}>{brand.retailers}</h1>
+            {brand.products.map((product) => {
+              return (
+                <h1 className={styles.product} key={product.name}>
+                  {product.name}
+                </h1>
+              );
+            })}
+          </div>
+        ))}
       </main>
     </div>
   );
 }
 
 export async function getServerSideProps(context) {
+  let selectedBrand = null;
+  let selectedPage = null;
+  if (context.query.brand) {
+    selectedBrand = context.query.brand.replace("-", " ");
+  }
+  if (context.query.page) {
+    selectedPage = context.query.page;
+  }
   const url = context.req.headers.host;
   try {
     const res = await fetch(`http://${url}/api/allbrands`);
     const data = await res.json();
+    const brands = data.data.reduce((array, item) => {
+      if (array.includes(item.brand)) {
+        return array;
+      } else {
+        return [...array, item.brand];
+      }
+    }, []);
+
     if (data.status === "error") {
       return {
         props: {
@@ -56,10 +111,17 @@ export async function getServerSideProps(context) {
       };
     } else {
       return {
-        props: { brands: data.data, error: null },
+        props: {
+          selectedBrand,
+          selectedPage,
+          brandData: brands,
+          alldata: data.data,
+          error: null,
+        },
       };
     }
   } catch (error) {
+    console.log(error);
     return {
       props: { brands: null, error: error },
     };
