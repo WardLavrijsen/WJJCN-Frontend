@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-export default async function AllBrands(req, res) {
+export default async function RetailerByBrand(req, res) {
   try {
     const resonse = await axios.get(
       "https://cjlvairppc.execute-api.eu-central-1.amazonaws.com/testing/get_retailers_by_brand",
@@ -15,9 +15,7 @@ export default async function AllBrands(req, res) {
         },
       }
     );
-
-    const data = JSON.parse(resonse.data);
-    res.status(200).json({ status: "ok", data });
+    res.status(200).json({ status: "ok", data: resonse.data });
   } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
   }
