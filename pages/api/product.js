@@ -5,10 +5,10 @@ import axios from "axios";
 export default async function Products(req, res) {
   try {
     const resonse = await axios.get(
-      "https://cjlvairppc.execute-api.eu-central-1.amazonaws.com/testing/get_retailers_by_brand",
+      `${process.env.API_URL}/get_retailers_with_score`,
       {
         headers: {
-          "x-api-key": "tk5MO5jZjh4szZkROdZ9I5IFQiSb0tmY34uQ6VTg",
+          "x-api-key": process.env.API_KEY,
         },
         data: {
           name: req.query.name,
