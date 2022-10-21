@@ -1,17 +1,15 @@
+import styles from "../../styles/Home.module.css";
 import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Nav from "../components/navbar";
-import { Card } from "flowbite-react";
-import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import { Card } from "flowbite-react";
 
-export default function Home({ brands, error }) {
+export default function Product({ products, error }) {
   const router = useRouter();
   const { id } = router.query;
 
-  console.log(brands);
+  const product = products.find((obj) => {
+    return obj.product === router.query.id;
+  });
 
   return (
     <div className={styles.container}>
@@ -20,8 +18,6 @@ export default function Home({ brands, error }) {
         <meta name="description" content="WOC live score dashboard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Nav />
 
       <main className={styles.main}>
         {error ? (
@@ -32,25 +28,27 @@ export default function Home({ brands, error }) {
           </div>
         ) : (
           <div className={styles.cardGrid}>
-            {brands.map((brand) => (
-              <a href={"/" + brand.brand} key={brand._id["$oid"]}>
-                <div className="max-w-sm">
-                  <Card imgSrc="https://flowbite.com/docs/images/blog/image-1.jpg">
-                    <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                      {brand.retailers}
-                    </h5>
-                    {brand.products.map((product) => (
-                      <h5
-                        key={product.name}
-                        className=" text-gray-900 dark:text-white"
-                      >
-                        {product.name}
-                      </h5>
-                    ))}
-                  </Card>
-                </div>
-              </a>
-            ))}
+            <Card imgSrc="https://flowbite.com/docs/images/blog/image-1.jpg">
+              <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {product.product}
+              </h5>
+              <div>
+                brand: {product.brand}
+                <br></br>
+                retailer: {product.retailer}
+                <br></br>
+                {Object.entries(product.product_brand).map(([key, value]) => {
+                  return (
+                    <div key={key}>
+                      <h3>
+                        {key}: {value}
+                      </h3>
+                      <br></br>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
           </div>
         )}
       </main>
@@ -62,7 +60,7 @@ export async function getServerSideProps(context) {
   const url = context.req.headers.host;
   try {
     const res = await fetch(
-      `http://${url}/api/retailerbybrand?name=${context.query.id}`
+      `http://${url}/api/product?name=${context.query.brand}&retailer=${context.query.retailer}`
     );
     const data = await res.json();
     if (data.status === "error") {
@@ -73,7 +71,7 @@ export async function getServerSideProps(context) {
       };
     } else {
       return {
-        props: { brands: data.data, error: null },
+        props: { products: data.data, error: null },
       };
     }
   } catch (error) {

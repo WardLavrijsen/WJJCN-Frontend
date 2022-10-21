@@ -1,10 +1,6 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import Nav from "../components/navbar";
 import { Card } from "flowbite-react";
-import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function Home({ brands, error }) {
@@ -29,23 +25,26 @@ export default function Home({ brands, error }) {
         ) : (
           <div className={styles.cardGrid}>
             {brands.map((brand) => (
-              <a href={"/" + brand.brand} key={brand._id["$oid"]}>
-                <div className="max-w-sm">
-                  <Card imgSrc="https://flowbite.com/docs/images/blog/image-1.jpg">
-                    <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                      {brand.retailers}
-                    </h5>
-                    {brand.products.map((product) => (
+              <div key={brand} className="max-w-sm">
+                <Card imgSrc="https://flowbite.com/docs/images/blog/image-1.jpg">
+                  <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    {brand.retailers}
+                  </h5>
+                  {brand.products.map((product) => (
+                    <a
+                      key={product.name}
+                      href={`/product/${product.name}?brand=${brand.brand}&retailer=${brand.retailers}`}
+                    >
                       <h5
                         key={product.name}
                         className=" text-gray-900 dark:text-white"
                       >
                         {product.name}
                       </h5>
-                    ))}
-                  </Card>
-                </div>
-              </a>
+                    </a>
+                  ))}
+                </Card>
+              </div>
             ))}
           </div>
         )}

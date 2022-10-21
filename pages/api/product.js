@@ -5,7 +5,7 @@ import axios from "axios";
 export default async function Products(req, res) {
   try {
     const resonse = await axios.get(
-      `${process.env.API_URL}/all_products_with_score`,
+      `${process.env.API_URL}/get_products_by_brand_and_retailer`,
       {
         headers: {
           "x-api-key": process.env.API_KEY,
@@ -17,8 +17,7 @@ export default async function Products(req, res) {
       }
     );
 
-    const data = JSON.parse(resonse.data);
-    res.status(200).json({ status: "ok", data });
+    res.status(200).json({ status: "ok", data: resonse.data });
   } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
   }

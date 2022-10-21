@@ -1,8 +1,5 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import Nav from "../components/navbar";
-import BrandCard from "../components/brandCard";
 
 import { useRouter } from "next/router";
 
@@ -78,7 +75,7 @@ export default function Home({ brandData, error }) {
       if (brand) {
         router.push("/" + brand);
       } else {
-        alert("Brand not found");
+        alert("Brand Staat niet in de database!");
       }
     }
   };
