@@ -11,8 +11,6 @@ export default function Home({ brands, error }) {
   const router = useRouter();
   const { id } = router.query;
 
-  console.log(brands);
-
   return (
     <div className={styles.container}>
       <Head>
@@ -20,8 +18,6 @@ export default function Home({ brands, error }) {
         <meta name="description" content="WOC live score dashboard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Nav />
 
       <main className={styles.main}>
         {error ? (

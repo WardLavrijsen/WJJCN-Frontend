@@ -1,0 +1,17 @@
+name: Wo Continuous Integration
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm run lint
+      - run: npm run build

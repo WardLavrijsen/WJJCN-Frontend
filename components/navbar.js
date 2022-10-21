@@ -2,7 +2,6 @@
 import { Navbar, TextInput } from "flowbite-react";
 
 export default function Nav({ user }) {
-  const handleLogOut = () => {};
   return (
     <Navbar
       style={{
@@ -29,9 +28,6 @@ export default function Nav({ user }) {
       <Navbar.Collapse>
         <Navbar.Link href="/" active={true}>
           Home
-        </Navbar.Link>
-        <Navbar.Link href="#" onClick={() => handleLogOut()}>
-          Log Out
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
