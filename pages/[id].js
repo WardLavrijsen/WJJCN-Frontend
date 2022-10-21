@@ -19,8 +19,6 @@ export default function Home({ brands, error }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Nav />
-
       <main className={styles.main}>
         {error ? (
           <div className="flex items-center justify-center gap-2 flex-col bg-red-600 text-white p-7 rounded-xl">
