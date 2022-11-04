@@ -8,8 +8,15 @@ export default function Product({ products, error }) {
   const { id } = router.query;
 
   const product = products.find((obj) => {
-    return obj.product === router.query.id;
+    if (router.query.product == null) {
+      return Object.values(obj);
+    }
+    return obj.product === router.query.product;
   });
+
+  const clickRetailer = (product) => {
+    router.push(`/${router.query.id}/${router.query.retailer}?product=${product}`)
+  };
 
   return (
     <div className={styles.container}>
@@ -27,28 +34,42 @@ export default function Product({ products, error }) {
             <h2>Probeer later opnieuw</h2>
           </div>
         ) : (
-          <div className={styles.cardGrid}>
-            <Card imgSrc="https://flowbite.com/docs/images/blog/image-1.jpg">
-              <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {product.product}
-              </h5>
-              <div>
-                brand: {product.brand}
-                <br></br>
-                retailer: {product.retailer}
-                <br></br>
-                {Object.entries(product.product_brand).map(([key, value]) => {
-                  return (
-                    <div key={key}>
-                      <h3>
-                        {key}: {value}
-                      </h3>
-                      <br></br>
-                    </div>
-                  );
-                })}
-              </div>
-            </Card>
+          <div>
+            {products.map((product) => {
+              return (
+                <div key={product._id.$oid}>
+                  <button onClick={() => clickRetailer(product.product)}>{product.product}</button>
+                </div>
+              );
+            })}
+
+            <div className={styles.cardGrid}>
+              <Card>
+                <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  {console.log(product)}
+                  {product.retailer}
+                </h5>
+                <div>
+                  <h3>{product.product}</h3>
+                </div>
+                {/* <div>
+      brand: {product.brand}
+      <br></br>
+      retailer: {product.retailer}
+      <br></br>
+      {Object.entries(product.product_brand).map(([key, value]) => {
+        return (
+          <div key={key}>
+            <h3>
+              {key}: {value}
+            </h3>
+            <br></br>
+          </div>
+        );
+      })}
+    </div> */}
+              </Card>
+            </div>
           </div>
         )}
       </main>
@@ -58,9 +79,10 @@ export default function Product({ products, error }) {
 
 export async function getServerSideProps(context) {
   const url = context.req.headers.host;
+
   try {
     const res = await fetch(
-      `http://${url}/api/product?name=${context.query.brand}&retailer=${context.query.retailer}`
+      `http://${url}/api/product?name=${context.query.id}&retailer=${context.query.retailer}`
     );
     const data = await res.json();
     if (data.status === "error") {
