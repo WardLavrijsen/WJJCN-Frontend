@@ -46,13 +46,13 @@ function editDistance(s1, s2) {
   return costs[s2.length];
 }
 
-export default function Home({ brandData, error }) {
+export default function Home({ brandData, error, errorStateServer }) {
   const [brands, setBrands] = useState(brandData);
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
   const [getError, setError] = useState(error);
-  const [errorState, setErrorState] = useState(false);
+  const [errorState, setErrorState] = useState(errorStateServer);
 
   const setSimilarity = (value) => {
     const suggestions = brands.filter((brand) => {
@@ -186,6 +186,7 @@ export async function getServerSideProps(context) {
       return {
         props: {
           error: "Data kan niet opgehaald worden",
+          errorStateServer: true,
         },
       };
     } else {
@@ -194,13 +195,18 @@ export async function getServerSideProps(context) {
           brandData: brands,
           alldata: data.data,
           error: null,
+          errorStateServer: false,
         },
       };
     }
   } catch (error) {
     console.log(error);
     return {
-      props: { brands: null, error: error },
+      props: {
+        brands: null,
+        error: error,
+        errorStateServer: true,
+      },
     };
   }
 }
