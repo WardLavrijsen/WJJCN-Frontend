@@ -2,10 +2,13 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { Card } from "flowbite-react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Home({ brands, error }) {
   const router = useRouter();
   const { id } = router.query;
+
+  const [data, setData] = useState(brands);
 
   return (
     <div className={styles.container}>
@@ -23,30 +26,7 @@ export default function Home({ brands, error }) {
             <h2>Probeer later opnieuw</h2>
           </div>
         ) : (
-          <div className={styles.cardGrid}>
-            {brands.map((brand) => (
-              <div key={brand} className="max-w-sm">
-                <Card imgSrc="https://flowbite.com/docs/images/blog/image-1.jpg">
-                  <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                    {brand.retailers}
-                  </h5>
-                  {brand.products.map((product) => (
-                    <a
-                      key={product.name}
-                      href={`/product/${product.name}?brand=${brand.brand}&retailer=${brand.retailers}`}
-                    >
-                      <h5
-                        key={product.name}
-                        className=" text-gray-900 dark:text-white"
-                      >
-                        {product.name}
-                      </h5>
-                    </a>
-                  ))}
-                </Card>
-              </div>
-            ))}
-          </div>
+          <div className={styles.cardGrid}></div>
         )}
       </main>
     </div>
