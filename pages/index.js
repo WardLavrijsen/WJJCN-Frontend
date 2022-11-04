@@ -51,6 +51,9 @@ export default function Home({ brandData, error }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
+  const [getError, setError] = useState(error);
+  const [errorState, setErrorState] = useState(false);
+
   const setSimilarity = (value) => {
     const suggestions = brands.filter((brand) => {
       if (!value) return false;
@@ -75,7 +78,13 @@ export default function Home({ brandData, error }) {
       if (brand) {
         router.push("/" + brand);
       } else {
-        alert("Brand Staat niet in de database!");
+        setErrorState(true);
+        setError("Brand Staat niet in de database!");
+
+        setTimeout(() => {
+          setErrorState(false);
+          setError("");
+        }, 3000);
       }
     }
   };
@@ -89,6 +98,12 @@ export default function Home({ brandData, error }) {
       </Head>
 
       <main className={styles.main}>
+        <div
+          className={styles.errorBox}
+          style={errorState ? { display: "block" } : { display: "none" }}
+        >
+          <h3>Error: {getError}</h3>
+        </div>
         <img
           className={styles.logo}
           alt="world of content logo"
