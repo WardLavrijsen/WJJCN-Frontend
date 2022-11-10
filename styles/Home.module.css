@@ -1,6 +1,7 @@
 .main {
   height: 100vh;
   width: 100vw;
+  max-width: 100%;
   padding: 4rem 0;
   flex: 1;
   gap: 30px;
@@ -140,4 +141,16 @@
   to {
     transform: rotate(359deg);
   }
+}
+
+.LoginButton {
+  background: var(--main-card-color);
+  padding: 0.4rem 2rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: black;
+  border-radius: 31px;
+  margin-top: 20px;
 }

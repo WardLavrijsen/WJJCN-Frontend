@@ -11,13 +11,71 @@ import { BiSearch, BiHomeAlt } from "react-icons/bi";
 import { BsChevronDoubleRight } from "react-icons/bs";
 import Link from "next/link";
 
+function similarity(s1, s2) {
+  var longer = s1;
+  var shorter = s2;
+  if (s1.length < s2.length) {
+    longer = s2;
+    shorter = s1;
+  }
+  var longerLength = longer.length;
+  if (longerLength == 0) {
+    return 1.0;
+  }
+  return (
+    (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength)
+  );
+}
+
+function editDistance(s1, s2) {
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
+
+  var costs = new Array();
+  for (var i = 0; i <= s1.length; i++) {
+    var lastValue = i;
+    for (var j = 0; j <= s2.length; j++) {
+      if (i == 0) costs[j] = j;
+      else {
+        if (j > 0) {
+          var newValue = costs[j - 1];
+          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+    }
+    if (i > 0) costs[s2.length] = lastValue;
+  }
+  return costs[s2.length];
+}
+
 export default function Home({ brands, error, errorStateServer }) {
   const router = useRouter();
   const { id } = router.query;
 
-  const [data, setData] = useState([...brands, ...brands]);
-  const [loading, setLoading] = useState(true);
-  console.log(data);
+  const pages = Math.ceil(brands.length / 4 - 1);
+  const [pageNumber, setPageNumber] = useState(0);
+
+  const [data, setData] = useState(brands);
+
+  const setSimilarity = (value) => {
+    const suggestions = brands.filter((brand) => {
+      if (!value) return false;
+      if (similarity(brand.retailers, value) >= 0.7) return true;
+      if (brand.retailers.toLowerCase().includes(value.toLowerCase()))
+        return true;
+      if (value.toLowerCase().includes(brand.retailers.toLowerCase()))
+        return true;
+      return false;
+    });
+    if (suggestions.length > 0) {
+      setData(suggestions);
+    } else {
+      setData([...brands.slice(0, 4)]);
+    }
+  };
 
   const [input, setInput] = useState("");
 
@@ -26,6 +84,13 @@ export default function Home({ brands, error, errorStateServer }) {
 
   const clickLink = (e) => {
     console.log(input);
+  };
+
+  const setPage = (page) => {
+    const start = page * 4;
+    const end = start + 4;
+    setData(brands.slice(start, end));
+    setPageNumber(page);
   };
 
   return (
@@ -65,6 +130,7 @@ export default function Home({ brands, error, errorStateServer }) {
                   }
                 }}
                 onChange={(e) => {
+                  setSimilarity(e.target.value);
                   setInput(e.target.value);
                 }}
                 placeholder="Search a retailer...."
@@ -78,7 +144,11 @@ export default function Home({ brands, error, errorStateServer }) {
           <div className={gridStyles.div2}>
             {data.map((brand) => {
               return (
-                <div key={brand.retailers} className={cardStyles.displayCard}>
+                <div
+                  key={brand.retailers}
+                  style={data.length == 1 ? { width: "50%" } : {}}
+                  className={cardStyles.displayCard}
+                >
                   <h2 className={cardStyles.retailertitle}>
                     {brand.retailers}
                   </h2>
@@ -120,11 +190,26 @@ export default function Home({ brands, error, errorStateServer }) {
             })}
           </div>
           <div className={gridStyles.div3}>
-            <button className={gridStyles.pageCircleDiv}>{"<"}</button>
-            <button className={gridStyles.activePageCircleDiv}>{"1"}</button>
-            <button className={gridStyles.pageCircleDiv}>{"2"}</button>
-            <button className={gridStyles.pageCircleDiv}>{"3"}</button>
-            <button className={gridStyles.pageCircleDiv}>{">"}</button>
+            {pageNumber >= 1 ? (
+              <button
+                onClick={() => setPage(pageNumber - 1)}
+                className={gridStyles.pageCircleDiv}
+              >
+                {"<"}
+              </button>
+            ) : null}
+
+            <div className={gridStyles.activePageCircleDiv}>
+              {pageNumber + 1}
+            </div>
+            {pageNumber < pages ? (
+              <button
+                onClick={() => setPage(pageNumber + 1)}
+                className={gridStyles.pageCircleDiv}
+              >
+                {">"}
+              </button>
+            ) : null}
           </div>
         </div>
 
