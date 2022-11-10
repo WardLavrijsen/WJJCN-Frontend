@@ -1,6 +1,7 @@
 .main {
-  min-height: 100vh;
+  height: 100vh;
   width: 100vw;
+  max-width: 100%;
   padding: 4rem 0;
   flex: 1;
   gap: 30px;
@@ -82,7 +83,6 @@
   border-bottom: none;
   border-top: none;
   z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
   top: 100%;
   left: 0;
   right: 0;
@@ -111,4 +111,46 @@
   color: white;
   padding: 20px;
   border-radius: 18px;
+}
+
+.mainTextDiv {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loadingText {
+  color: white;
+  animation: rotation 2s infinite linear;
+}
+
+.loadingTitle {
+  color: white;
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.LoginButton {
+  background: var(--main-card-color);
+  padding: 0.4rem 2rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: black;
+  border-radius: 31px;
+  margin-top: 20px;
 }
