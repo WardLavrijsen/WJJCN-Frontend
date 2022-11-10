@@ -51,6 +51,8 @@ export default function Home({ brandData, error, errorStateServer }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
+  let notStateBrand;
+
   const [getError, setError] = useState(error);
   const [errorState, setErrorState] = useState(errorStateServer);
 
@@ -69,22 +71,43 @@ export default function Home({ brandData, error, errorStateServer }) {
 
   const clickLink = (e) => {
     e.preventDefault();
-    if (brands.includes(input)) {
-      router.push("/" + input);
-    } else {
-      const brand = brands.find(
-        (element) => element.toLowerCase() == input.toLowerCase()
-      );
-      if (brand) {
-        router.push("/" + brand);
+    if (notStateBrand) {
+      if (brands.includes(notStateBrand)) {
+        router.push("/" + notStateBrand);
       } else {
-        setErrorState(true);
-        setError("Brand Staat niet in de database!");
+        const brand = brands.find(
+          (element) => element.toLowerCase() == input.toLowerCase()
+        );
+        if (brand) {
+          router.push("/" + brand);
+        } else {
+          setErrorState(true);
+          setError("Brand Staat niet in de database!");
 
-        setTimeout(() => {
-          setErrorState(false);
-          setError("");
-        }, 3000);
+          setTimeout(() => {
+            setErrorState(false);
+            setError("");
+          }, 3000);
+        }
+      }
+    } else {
+      if (brands.includes(input)) {
+        router.push("/" + input);
+      } else {
+        const brand = brands.find(
+          (element) => element.toLowerCase() == input.toLowerCase()
+        );
+        if (brand) {
+          router.push("/" + brand);
+        } else {
+          setErrorState(true);
+          setError("Brand Staat niet in de database!");
+
+          setTimeout(() => {
+            setErrorState(false);
+            setError("");
+          }, 3000);
+        }
       }
     }
   };
@@ -118,13 +141,12 @@ export default function Home({ brandData, error, errorStateServer }) {
         ) : (
           <>
             <div className={styles.search}>
-              <h1 className={styles.HomeTitle}>Welkom</h1>
+              <h1 className={styles.HomeTitle}>Welcome</h1>
               <h2 className={styles.SecondTitle}>
-                Bij World of Content Live Score
+                World of Content Live Score
               </h2>
-              <h3 className={styles.ThirdTitle}>
-                Selecteer uw brand om verder te gaan
-              </h3>
+              <h3 className={styles.ThirdTitle}>Select a brand to continue</h3>
+
               <div className={styles.Searchbox}>
                 <input
                   value={input}
@@ -150,9 +172,11 @@ export default function Home({ brandData, error, errorStateServer }) {
                     {suggestions.map((suggestion) => (
                       <div
                         key={suggestion}
-                        onClick={() => {
+                        onClick={(e) => {
                           setInput(suggestion);
                           setSuggestions([]);
+                          notStateBrand = suggestion;
+                          clickLink(e);
                         }}
                       >
                         {suggestion}
