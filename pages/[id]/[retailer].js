@@ -1,7 +1,7 @@
 import styles from "../../styles/Home.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Card } from "flowbite-react";
+import { Accordion, Card } from "flowbite-react";
 
 export default function Product({ products, error }) {
   const router = useRouter();
@@ -15,8 +15,18 @@ export default function Product({ products, error }) {
   });
 
   const clickRetailer = (product) => {
-    router.push(`/${router.query.id}/${router.query.retailer}?product=${product}`)
+    router.push(
+      `/${router.query.id}/${router.query.retailer}?product=${product}`
+    );
   };
+  
+  const previousRetailer = () => {
+
+  }
+
+  const nextRetailer = () => {
+
+  }
 
   return (
     <div className={styles.container}>
@@ -26,7 +36,7 @@ export default function Product({ products, error }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main className={styles.main} style={{ maxWidth: "100%" }}>
         {error ? (
           <div className="flex items-center justify-center gap-2 flex-col bg-red-600 text-white p-7 rounded-xl">
             <h1 className="text-3xl">ERROR:</h1>
@@ -35,40 +45,68 @@ export default function Product({ products, error }) {
           </div>
         ) : (
           <div>
-            {products.map((product) => {
-              return (
-                <div key={product._id.$oid}>
-                  <button onClick={() => clickRetailer(product.product)}>{product.product}</button>
-                </div>
-              );
-            })}
-
-            <div className={styles.cardGrid}>
+            <div style={{ display: "flex" }}>
               <Card>
-                <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  {console.log(product)}
-                  {product.retailer}
-                </h5>
-                <div>
-                  <h3>{product.product}</h3>
-                </div>
-                {/* <div>
-      brand: {product.brand}
-      <br></br>
-      retailer: {product.retailer}
-      <br></br>
-      {Object.entries(product.product_brand).map(([key, value]) => {
-        return (
-          <div key={key}>
-            <h3>
-              {key}: {value}
-            </h3>
-            <br></br>
-          </div>
-        );
-      })}
-    </div> */}
+                <h5>IMAGE WoC</h5>
               </Card>
+              <Card>
+                <div style={{display: "flex"}}>
+                  <h5>{product.retailer}</h5>
+                  <button style={{backgroundColor: "lightBlue"}} onClick={() => previousRetailer()}>Previous Retailer</button>
+                </div>
+                <div style={{display: "flex"}}>
+                  <p>percentage% overeenkomst</p>
+                  <button style={{backgroundColor: "lightBlue"}} onClick={() => nextRetailer()}>Next Retailer</button>
+                </div>
+                <p>progress bar</p>
+              </Card>
+            </div>
+            <div style={{ display: "flex" }}>
+              <Card>
+                {products.map((product) => {
+                  return (
+                    <div key={product._id.$oid}>
+                      <button onClick={() => clickRetailer(product.product)}>
+                        {product.product}
+                      </button>
+                    </div>
+                  );
+                })}
+              </Card>
+              <br></br>
+              {console.log(product)}
+              <Accordion style={{ backgroundColor: "white" }}>
+                {Object.entries(product.product_brand).map(([key, value]) => {
+                  return (
+                    <Accordion.Panel key={key}>
+                      <Accordion.Title>
+                        <div style={{ display: "flex" }}>
+                          <h3>{key}:</h3>
+                          <p>overeenkomst: ja/nee</p>
+                        </div>
+                      </Accordion.Title>
+                      <Accordion.Content style={{ backgroundColor: "white" }}>
+                        <div style={{ display: "flex" }}>
+                          <div>
+                            <h3>Product from WoC</h3>
+                            <br></br>
+                            <h6>Text:</h6>
+                            <br></br>
+                            <p>{value}</p>
+                          </div>
+                          <div>
+                            <h3>Product from retailer</h3>
+                            <br></br>
+                            <h6>Text:</h6>
+                            <br></br>
+                            <p>{product.product_scraped[key]}</p>
+                          </div>
+                        </div>
+                      </Accordion.Content>
+                    </Accordion.Panel>
+                  );
+                })}
+              </Accordion>
             </div>
           </div>
         )}
