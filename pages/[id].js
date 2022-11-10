@@ -16,6 +16,7 @@ export default function Home({ brands, error, errorStateServer }) {
   const { id } = router.query;
 
   const [data, setData] = useState([...brands, ...brands]);
+  const [loading, setLoading] = useState(true);
   console.log(data);
 
   const [input, setInput] = useState("");
@@ -66,7 +67,7 @@ export default function Home({ brands, error, errorStateServer }) {
                 onChange={(e) => {
                   setInput(e.target.value);
                 }}
-                placeholder="Zoek uw Retailer...."
+                placeholder="Search a retailer...."
                 className={gridStyles.Searchbar}
               />
               <button onClick={clickLink} className={gridStyles.SearchButton}>
@@ -118,7 +119,13 @@ export default function Home({ brands, error, errorStateServer }) {
               );
             })}
           </div>
-          <div className={gridStyles.div3}>Test</div>
+          <div className={gridStyles.div3}>
+            <button className={gridStyles.pageCircleDiv}>{"<"}</button>
+            <button className={gridStyles.activePageCircleDiv}>{"1"}</button>
+            <button className={gridStyles.pageCircleDiv}>{"2"}</button>
+            <button className={gridStyles.pageCircleDiv}>{"3"}</button>
+            <button className={gridStyles.pageCircleDiv}>{">"}</button>
+          </div>
         </div>
 
         <div

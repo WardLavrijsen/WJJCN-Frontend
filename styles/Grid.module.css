@@ -51,6 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
 }
 
 .main {
@@ -77,4 +78,28 @@
   padding-right: 1rem;
   border: none;
   cursor: pointer;
+}
+
+.pageCircleDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: white;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.activePageCircleDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  background-color: var(--main-blue);
+  border: solid 4px white;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
 }

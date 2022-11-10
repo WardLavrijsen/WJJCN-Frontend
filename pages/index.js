@@ -159,7 +159,7 @@ export default function Home({ brandData, error, errorStateServer }) {
                     setSimilarity(e.target.value);
                     setInput(e.target.value);
                   }}
-                  placeholder="Zoek uw brand...."
+                  placeholder="Search a brand...."
                   className={styles.Searchbar}
                 />
                 <button onClick={clickLink} className={styles.SearchButton}>

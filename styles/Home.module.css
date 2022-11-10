@@ -1,5 +1,5 @@
 .main {
-  min-height: 100vh;
+  height: 100vh;
   width: 100vw;
   padding: 4rem 0;
   flex: 1;
@@ -110,4 +110,34 @@
   color: white;
   padding: 20px;
   border-radius: 18px;
+}
+
+.mainTextDiv {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loadingText {
+  color: white;
+  animation: rotation 2s infinite linear;
+}
+
+.loadingTitle {
+  color: white;
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }
