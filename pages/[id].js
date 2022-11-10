@@ -149,9 +149,11 @@ export default function Home({ brands, error, errorStateServer }) {
                   style={data.length == 1 ? { width: "50%" } : {}}
                   className={cardStyles.displayCard}
                 >
-                  <h2 className={cardStyles.retailertitle}>
-                    {brand.retailers}
-                  </h2>
+                  <a href={`/${id}/${brand.retailers}`}>
+                    <h2 className={cardStyles.retailertitle}>
+                      {brand.retailers}
+                    </h2>
+                  </a>
                   <div className={cardStyles.productenBox}>
                     {brand.products.map((product) => {
                       return (
@@ -159,9 +161,13 @@ export default function Home({ brands, error, errorStateServer }) {
                           key={product.name}
                           className={cardStyles.productBox}
                         >
-                          <h4 className={cardStyles.productName}>
-                            {product.name}
-                          </h4>
+                          <a
+                            href={`/${id}/${brand.retailers}?product=${product.name}`}
+                          >
+                            <h4 className={cardStyles.productName}>
+                              {product.name}
+                            </h4>
+                          </a>
                           <p className={cardStyles.scoreName}>
                             {product.score} Similarity
                           </p>
