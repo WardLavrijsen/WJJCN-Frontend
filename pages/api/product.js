@@ -16,7 +16,6 @@ export default async function Products(req, res) {
         },
       }
     );
-
     res.status(200).json({ status: "ok", data: resonse.data });
   } catch (error) {
     res.status(400).json({ status: "error", message: error.message });
