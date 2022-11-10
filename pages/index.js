@@ -46,10 +46,15 @@ function editDistance(s1, s2) {
   return costs[s2.length];
 }
 
-export default function Home({ brandData, error }) {
+export default function Home({ brandData, error, errorStateServer }) {
   const [brands, setBrands] = useState(brandData);
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+
+  let notStateBrand;
+
+  const [getError, setError] = useState(error);
+  const [errorState, setErrorState] = useState(errorStateServer);
 
   const setSimilarity = (value) => {
     const suggestions = brands.filter((brand) => {
@@ -66,16 +71,43 @@ export default function Home({ brandData, error }) {
 
   const clickLink = (e) => {
     e.preventDefault();
-    if (brands.includes(input)) {
-      router.push("/" + input);
-    } else {
-      const brand = brands.find(
-        (element) => element.toLowerCase() == input.toLowerCase()
-      );
-      if (brand) {
-        router.push("/" + brand);
+    if (notStateBrand) {
+      if (brands.includes(notStateBrand)) {
+        router.push("/" + notStateBrand);
       } else {
-        alert("Brand Staat niet in de database!");
+        const brand = brands.find(
+          (element) => element.toLowerCase() == input.toLowerCase()
+        );
+        if (brand) {
+          router.push("/" + brand);
+        } else {
+          setErrorState(true);
+          setError("Brand Staat niet in de database!");
+
+          setTimeout(() => {
+            setErrorState(false);
+            setError("");
+          }, 3000);
+        }
+      }
+    } else {
+      if (brands.includes(input)) {
+        router.push("/" + input);
+      } else {
+        const brand = brands.find(
+          (element) => element.toLowerCase() == input.toLowerCase()
+        );
+        if (brand) {
+          router.push("/" + brand);
+        } else {
+          setErrorState(true);
+          setError("Brand Staat niet in de database!");
+
+          setTimeout(() => {
+            setErrorState(false);
+            setError("");
+          }, 3000);
+        }
       }
     }
   };
@@ -89,6 +121,12 @@ export default function Home({ brandData, error }) {
       </Head>
 
       <main className={styles.main}>
+        <div
+          className={styles.errorBox}
+          style={errorState ? { display: "block" } : { display: "none" }}
+        >
+          <h3>Error: {getError}</h3>
+        </div>
         <img
           className={styles.logo}
           alt="world of content logo"
@@ -103,13 +141,12 @@ export default function Home({ brandData, error }) {
         ) : (
           <>
             <div className={styles.search}>
-              <h1 className={styles.HomeTitle}>Welkom</h1>
+              <h1 className={styles.HomeTitle}>Welcome</h1>
               <h2 className={styles.SecondTitle}>
-                Bij World of Content Live Score
+                World of Content Live Score
               </h2>
-              <h3 className={styles.ThirdTitle}>
-                Selecteer uw brand om verder te gaan
-              </h3>
+              <h3 className={styles.ThirdTitle}>Select a brand to continue</h3>
+
               <div className={styles.Searchbox}>
                 <input
                   value={input}
@@ -122,7 +159,7 @@ export default function Home({ brandData, error }) {
                     setSimilarity(e.target.value);
                     setInput(e.target.value);
                   }}
-                  placeholder="Zoek uw brand...."
+                  placeholder="Search a brand...."
                   className={styles.Searchbar}
                 />
                 <button onClick={clickLink} className={styles.SearchButton}>
@@ -135,9 +172,11 @@ export default function Home({ brandData, error }) {
                     {suggestions.map((suggestion) => (
                       <div
                         key={suggestion}
-                        onClick={() => {
+                        onClick={(e) => {
                           setInput(suggestion);
                           setSuggestions([]);
+                          notStateBrand = suggestion;
+                          clickLink(e);
                         }}
                       >
                         {suggestion}
@@ -171,6 +210,7 @@ export async function getServerSideProps(context) {
       return {
         props: {
           error: "Data kan niet opgehaald worden",
+          errorStateServer: true,
         },
       };
     } else {
@@ -179,13 +219,18 @@ export async function getServerSideProps(context) {
           brandData: brands,
           alldata: data.data,
           error: null,
+          errorStateServer: false,
         },
       };
     }
   } catch (error) {
     console.log(error);
     return {
-      props: { brands: null, error: error },
+      props: {
+        brands: null,
+        error: error,
+        errorStateServer: true,
+      },
     };
   }
 }
