@@ -4,7 +4,7 @@ import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 
 import { BiLogIn } from "react-icons/bi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function Home({ error, errorStateServer }) {
@@ -12,6 +12,14 @@ export default function Home({ error, errorStateServer }) {
 
   const [getError, setError] = useState(error);
   const [errorState, setErrorState] = useState(errorStateServer);
+
+  const [pageLoad, setPageLoad] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPageLoad(true);
+    }, 10);
+  }, []);
 
   const autenticate = async (e) => {
     e.preventDefault();
@@ -41,7 +49,7 @@ export default function Home({ error, errorStateServer }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main className={pageLoad ? styles.main : styles.Fadein}>
         <div
           className={styles.errorBox}
           style={errorState ? { display: "block" } : { display: "none" }}

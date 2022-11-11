@@ -20,10 +20,36 @@
 .productenBox {
   height: 75%;
   width: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.productenBox::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+.productenBox::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 100px;
+  border: solid 2px var(--main-blue);
+  margin-bottom: 20px;
+}
+
+/* Handle */
+.productenBox::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 100px;
+  border: solid 2px var(--main-blue);
+}
+
+/* Handle on hover */
+.productenBox::-webkit-scrollbar-thumb:hover {
+  background: #c8c8c8;
+  border-radius: 100px;
 }
 
 .productBox {

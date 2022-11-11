@@ -19,14 +19,10 @@ export default function Product({ products, error }) {
       `/${router.query.id}/${router.query.retailer}?product=${product}`
     );
   };
-  
-  const previousRetailer = () => {
 
-  }
+  const previousRetailer = () => {};
 
-  const nextRetailer = () => {
-
-  }
+  const nextRetailer = () => {};
 
   return (
     <div className={styles.container}>
@@ -50,13 +46,23 @@ export default function Product({ products, error }) {
                 <h5>IMAGE WoC</h5>
               </Card>
               <Card>
-                <div style={{display: "flex"}}>
+                <div style={{ display: "flex" }}>
                   <h5>{product.retailer}</h5>
-                  <button style={{backgroundColor: "lightBlue"}} onClick={() => previousRetailer()}>Previous Retailer</button>
+                  <button
+                    style={{ backgroundColor: "lightBlue" }}
+                    onClick={() => previousRetailer()}
+                  >
+                    Previous Retailer
+                  </button>
                 </div>
-                <div style={{display: "flex"}}>
+                <div style={{ display: "flex" }}>
                   <p>percentage% overeenkomst</p>
-                  <button style={{backgroundColor: "lightBlue"}} onClick={() => nextRetailer()}>Next Retailer</button>
+                  <button
+                    style={{ backgroundColor: "lightBlue" }}
+                    onClick={() => nextRetailer()}
+                  >
+                    Next Retailer
+                  </button>
                 </div>
                 <p>progress bar</p>
               </Card>

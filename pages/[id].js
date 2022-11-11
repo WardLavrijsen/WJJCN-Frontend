@@ -5,7 +5,7 @@ import cardStyles from "../styles/RetailerProductBox.module.css";
 
 import { Card } from "flowbite-react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { BiSearch, BiHomeAlt } from "react-icons/bi";
 import { BsChevronDoubleRight } from "react-icons/bs";
@@ -55,7 +55,15 @@ export default function Home({ brands, error, errorStateServer }) {
   const router = useRouter();
   const { id } = router.query;
 
-  const pages = Math.ceil(brands.length / 4 - 1);
+  const [pageLoad, setPageLoad] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPageLoad(true);
+    }, 10);
+  }, []);
+
+  const pages = brands ? Math.ceil(brands.length / 4 - 1) : null;
   const [pageNumber, setPageNumber] = useState(0);
 
   const [data, setData] = useState(brands);
@@ -101,123 +109,132 @@ export default function Home({ brands, error, errorStateServer }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={gridStyles.main}>
-        <div className={gridStyles.parent}>
-          <div className={gridStyles.div1}>
-            <img
-              className={styles.logo}
-              alt="world of content logo"
-              src="/images/w-logo.png"
-            />
-            <h3 className={gridStyles.breadcrums}>
-              <Link href="/" className={gridStyles.Link}>
-                <BiHomeAlt
+      <main className={pageLoad ? gridStyles.main : gridStyles.Fadein}>
+        {getError ? (
+          <div style={{ marginTop: "50px" }} className={styles.error}>
+            <h1>{errorState}</h1>
+          </div>
+        ) : (
+          <div className={gridStyles.parent}>
+            <div className={gridStyles.div1}>
+              <Link style={{ cursor: "pointer" }} href={"/"}>
+                <img
                   style={{ cursor: "pointer" }}
-                  className={gridStyles.homeLogo}
+                  className={styles.logo}
+                  alt="world of content logo"
+                  src="/images/w-logo.png"
                 />
               </Link>
-              <BsChevronDoubleRight className={gridStyles.homeLogo} />
-              <Link href={"/"}>
-                <u style={{ cursor: "pointer" }}>{id}</u>
-              </Link>
-            </h3>
-            <div className={gridStyles.Searchbox}>
-              <input
-                value={input}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    clickLink(e);
-                  }
-                }}
-                onChange={(e) => {
-                  setSimilarity(e.target.value);
-                  setInput(e.target.value);
-                }}
-                placeholder="Search a retailer...."
-                className={gridStyles.Searchbar}
-              />
-              <button onClick={clickLink} className={gridStyles.SearchButton}>
-                <BiSearch />
-              </button>
+              <h3 className={gridStyles.breadcrums}>
+                <Link href="/" className={gridStyles.Link}>
+                  <BiHomeAlt
+                    style={{ cursor: "pointer" }}
+                    className={gridStyles.homeLogo}
+                  />
+                </Link>
+                <BsChevronDoubleRight className={gridStyles.homeLogo} />
+                <Link href={"/"}>
+                  <u style={{ cursor: "pointer" }}>{id}</u>
+                </Link>
+              </h3>
+              <div className={gridStyles.Searchbox}>
+                <input
+                  value={input}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      clickLink(e);
+                    }
+                  }}
+                  onChange={(e) => {
+                    setSimilarity(e.target.value);
+                    setInput(e.target.value);
+                  }}
+                  placeholder="Search a retailer...."
+                  className={gridStyles.Searchbar}
+                />
+                <button onClick={clickLink} className={gridStyles.SearchButton}>
+                  <BiSearch />
+                </button>
+              </div>
             </div>
-          </div>
-          <div className={gridStyles.div2}>
-            {data.map((brand) => {
-              return (
-                <div
-                  key={brand.retailers}
-                  style={data.length == 1 ? { width: "50%" } : {}}
-                  className={cardStyles.displayCard}
-                >
-                  <a href={`/${id}/${brand.retailers}`}>
-                    <h2 className={cardStyles.retailertitle}>
-                      {brand.retailers}
-                    </h2>
-                  </a>
-                  <div className={cardStyles.productenBox}>
-                    {brand.products.map((product) => {
-                      return (
-                        <div
-                          key={product.name}
-                          className={cardStyles.productBox}
-                        >
-                          <a
-                            href={`/${id}/${brand.retailers}?product=${product.name}`}
+            <div className={gridStyles.div2}>
+              {data.map((brand) => {
+                return (
+                  <div
+                    key={brand.retailers}
+                    style={data.length == 1 ? { width: "50%" } : {}}
+                    className={cardStyles.displayCard}
+                  >
+                    <a href={`/${id}/${brand.retailers}`}>
+                      <h2 className={cardStyles.retailertitle}>
+                        {brand.retailers}
+                      </h2>
+                    </a>
+                    <div className={cardStyles.productenBox}>
+                      {brand.products.map((product) => {
+                        return (
+                          <div
+                            key={product.name}
+                            className={cardStyles.productBox}
                           >
-                            <h4 className={cardStyles.productName}>
-                              {product.name}
-                            </h4>
-                          </a>
-                          <p className={cardStyles.scoreName}>
-                            {product.score} Similarity
-                          </p>
-                          <div className={cardStyles.progressBar}>
-                            <div
-                              style={{
-                                width: `${product.score}`,
-                                backgroundColor:
-                                  parseInt(product.score) >= 50
-                                    ? parseInt(product.score) >= 75
-                                      ? "#2ecc71"
-                                      : "#F1C40F"
-                                    : parseInt(product.score) >= 25
-                                    ? "#E67E22"
-                                    : "#E74C3C",
-                              }}
-                              className={cardStyles.progressBarInsert}
-                            ></div>
+                            <a
+                              href={`/${id}/${brand.retailers}?product=${product.name}`}
+                            >
+                              <h4 className={cardStyles.productName}>
+                                {product.name}
+                              </h4>
+                            </a>
+                            <p className={cardStyles.scoreName}>
+                              {product.score} Similarity
+                            </p>
+                            <div className={cardStyles.progressBar}>
+                              <div
+                                style={{
+                                  width: `${product.score}`,
+                                  backgroundColor:
+                                    parseInt(product.score) >= 50
+                                      ? parseInt(product.score) >= 75
+                                        ? "#2ecc71"
+                                        : "#F1C40F"
+                                      : parseInt(product.score) >= 25
+                                      ? "#E67E22"
+                                      : "#E74C3C",
+                                }}
+                                className={cardStyles.progressBarInsert}
+                              ></div>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className={gridStyles.div3}>
-            {pageNumber >= 1 ? (
-              <button
-                onClick={() => setPage(pageNumber - 1)}
-                className={gridStyles.pageCircleDiv}
-              >
-                {"<"}
-              </button>
-            ) : null}
-
-            <div className={gridStyles.activePageCircleDiv}>
-              {pageNumber + 1}
+                );
+              })}
             </div>
-            {pageNumber < pages ? (
-              <button
-                onClick={() => setPage(pageNumber + 1)}
-                className={gridStyles.pageCircleDiv}
-              >
-                {">"}
-              </button>
-            ) : null}
+            <div className={gridStyles.div3}>
+              {pageNumber >= 1 ? (
+                <button
+                  onClick={() => setPage(pageNumber - 1)}
+                  className={gridStyles.pageCircleDiv}
+                >
+                  {"<"}
+                </button>
+              ) : null}
+
+              <div className={gridStyles.activePageCircleDiv}>
+                {pageNumber + 1}
+              </div>
+              {pageNumber < pages ? (
+                <button
+                  onClick={() => setPage(pageNumber + 1)}
+                  className={gridStyles.pageCircleDiv}
+                >
+                  {">"}
+                </button>
+              ) : null}
+            </div>
           </div>
-        </div>
+        )}
 
         <div
           className={styles.errorBox}
@@ -245,9 +262,18 @@ export async function getServerSideProps(context) {
         },
       };
     } else {
-      return {
-        props: { brands: data.data, error: null, errorStateServer: false },
-      };
+      if (data.data.length == 0) {
+        return {
+          props: {
+            error: "Geen brand gevonden",
+            errorStateServer: true,
+          },
+        };
+      } else {
+        return {
+          props: { brands: data.data, error: null, errorStateServer: false },
+        };
+      }
     }
   } catch (error) {
     return {

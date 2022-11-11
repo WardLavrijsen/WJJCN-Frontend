@@ -1,10 +1,13 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import modelStyles from "../styles/Model.module.css";
+
+import Link from "next/link";
 
 import { useRouter } from "next/router";
 
-import { BiSearch } from "react-icons/bi";
-import { useState } from "react";
+import { BiSearch, BiX } from "react-icons/bi";
+import { useState, useEffect } from "react";
 
 function similarity(s1, s2) {
   var longer = s1;
@@ -50,6 +53,15 @@ export default function Home({ brandData, error, errorStateServer }) {
   const [brands, setBrands] = useState(brandData);
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [model, setModel] = useState(false);
+
+  const [pageLoad, setPageLoad] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPageLoad(true);
+    }, 10);
+  }, []);
 
   let notStateBrand;
 
@@ -68,6 +80,10 @@ export default function Home({ brandData, error, errorStateServer }) {
   };
 
   const router = useRouter();
+
+  const test = new Array([
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+  ]);
 
   const clickLink = (e) => {
     e.preventDefault();
@@ -120,25 +136,69 @@ export default function Home({ brandData, error, errorStateServer }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main className={pageLoad ? styles.main : styles.Fadein}>
+        {model ? (
+          <div
+            onClick={() => setModel(false)}
+            className={modelStyles.overlay}
+          ></div>
+        ) : (
+          <button
+            onClick={() => setModel(true)}
+            className={modelStyles.openModelButton}
+          >
+            All Brands
+          </button>
+        )}
+        {model ? (
+          <div on={() => setModel(false)} className={modelStyles.model}>
+            <button
+              onClick={() => setModel(false)}
+              className={modelStyles.closeButton}
+            >
+              <BiX />
+            </button>
+            <div className={modelStyles.div1}>
+              <h1 className={modelStyles.modelTitle}>All Brands</h1>
+            </div>
+            <div className={modelStyles.div2}>
+              {brands.map((brand) => (
+                <div key={brand} className={modelStyles.brandButtonDiv}>
+                  <button
+                    onClick={(e) => {
+                      notStateBrand = brand;
+                      clickLink(e);
+                    }}
+                    className={modelStyles.brandButton}
+                  >
+                    {brand}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
         <div
           className={styles.errorBox}
           style={errorState ? { display: "block" } : { display: "none" }}
         >
           <h3>Error: {getError}</h3>
         </div>
-        <img
-          className={styles.logo}
-          alt="world of content logo"
-          src="/images/w-logo.png"
-        />
+        <Link style={{ cursor: "pointer" }} href={"/"}>
+          <img
+            style={{ cursor: "pointer" }}
+            className={styles.logo}
+            alt="world of content logo"
+            src="/images/w-logo.png"
+          />
+        </Link>
         {error ? (
           <div className="flex items-center justify-center gap-2 flex-col bg-red-600 text-white p-7 rounded-xl">
             <h1 className="text-3xl">ERROR:</h1>
             <h1>{error}</h1>
             <h2>Probeer later opnieuw</h2>
           </div>
-        ) : (
+        ) : model ? null : (
           <>
             <div className={styles.search}>
               <h1 className={styles.HomeTitle}>Welcome</h1>
