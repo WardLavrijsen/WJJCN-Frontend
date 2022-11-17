@@ -80,7 +80,6 @@ export default function Product({ products, error }) {
                 })}
               </Card>
               <br></br>
-              {console.log(product)}
               <Accordion style={{ backgroundColor: "white" }}>
                 {Object.entries(product.product_brand).map(([key, value]) => {
                   return (
