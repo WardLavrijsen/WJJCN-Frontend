@@ -72,6 +72,11 @@ export default function Home({
     }, 10);
   }, []);
 
+  const handleAddRetailer = (e) => {
+    e.preventDefault();
+    console.log(e);
+  };
+
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     if (password !== passwordConfirm) {
@@ -178,6 +183,16 @@ export default function Home({
                 <div className={adminSytles.titlebox}>
                   <h1 className={adminSytles.titleintitlebox}>Retailers</h1>
                   <div>
+                    <button
+                      style={{ marginRight: "1rem" }}
+                      className={adminSytles.buttonintitlebox}
+                      onClick={() => {
+                        setActive("addRetailer");
+                        setRetailers(JSON.parse(JSON.stringify(orgRetailers)));
+                      }}
+                    >
+                      Toevoegen
+                    </button>
                     <button
                       style={{ marginRight: "1rem" }}
                       className={adminSytles.buttonintitlebox}
@@ -302,7 +317,7 @@ export default function Home({
                           </div>
                         </div>
                         <div className={adminSytles.scraperboxName}>
-                          {retailer.retailer}
+                          {retailer.retailer["$oid"]}
                         </div>
                         <div className={adminSytles.scraperboxStep}>
                           {retailer.steps.link_crawling.status ? (
@@ -404,6 +419,67 @@ export default function Home({
                   {errorForErrorPage}
                 </h3>
               </div>
+              <div
+                className={adminSytles.infobox}
+                style={
+                  active === "addRetailer"
+                    ? { display: "block" }
+                    : { display: "none" }
+                }
+              >
+                <div className={adminSytles.titlebox}>
+                  <h1 className={adminSytles.titleintitlebox}>Add Retailer</h1>
+                  <div>
+                    <button
+                      onClick={() => setActive("retailers")}
+                      className={adminSytles.buttonintitlebox}
+                    >
+                      Go Back
+                    </button>
+                  </div>
+                </div>
+                <form
+                  onSubmit={handleAddRetailer}
+                  className={adminSytles.addRetailerForm}
+                >
+                  <div className={adminSytles.inputDiv}>
+                    <label htmlFor="scrape">Scrape:</label>
+                    <input
+                      className={adminSytles.checkbox}
+                      type="checkbox"
+                      name="scrape"
+                      id="scrape"
+                    ></input>
+                  </div>
+                  <div className={adminSytles.inputDiv}>
+                    <label htmlFor="name">Name:</label>
+                    <input type="text" name="name" id="name" required></input>
+                  </div>
+                  <div className={adminSytles.inputDiv}>
+                    <label htmlFor="base-url">Base-URL:</label>
+                    <input
+                      type="url"
+                      name="base-url"
+                      id="base-url"
+                      required
+                    ></input>
+                  </div>
+                  <div className={adminSytles.inputDiv}>
+                    <label htmlFor="scrape-url">Scrape-URL:</label>
+                    <input
+                      type="url"
+                      name="scrape-url"
+                      id="scrape-url"
+                      required
+                    ></input>
+                  </div>
+                  <input
+                    className={adminSytles.addRetailerSubmitButton}
+                    type="submit"
+                    name="submitbutton"
+                  ></input>
+                </form>
+              </div>
             </div>
           </div>
           <div className={adminSytles.div3}>
@@ -491,8 +567,6 @@ export async function getServerSideProps(context) {
     );
     const dataLogs = await resLogs.json();
 
-    console.log(dataLogs.data[0]);
-
     const retailersResponse = await fetch(`http://${url}/api/allretailers`);
     const retailersData = await retailersResponse.json();
 
@@ -506,6 +580,14 @@ export async function getServerSideProps(context) {
     if (data.data.statuscode === 200) {
       if (retailersData.status === "ok") {
         if (dataLogs.status === "ok") {
+          console.log({
+            logs: dataLogs.data,
+            token: context.query.token,
+            retailersServer: retailers,
+            orgRetailers: orgRetailers,
+            error: "",
+            errorStateServer: false,
+          });
           return {
             props: {
               logs: dataLogs.data,
@@ -542,7 +624,6 @@ export async function getServerSideProps(context) {
       };
     }
   } catch (error) {
-    console.log(error);
     return {
       redirect: {
         destination: "/woc-admin",

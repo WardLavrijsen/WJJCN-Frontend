@@ -337,3 +337,29 @@
   padding: 0.5rem 0rem;
   width: 12.3vw;
 }
+
+.addRetailerForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 80%;
+  width: 70%;
+  padding-left: 5vw;
+  padding-bottom: 3vw;
+  gap: 3vh;
+}
+.inputDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.addRetailerSubmitButton {
+  background-color: #3a74e1;
+  padding: 0.8vw 1.5vw;
+  border-radius: 5px;
+  color: white;
+  font-size: 1.1rem;
+  width: 40%;
+  cursor: pointer;
+}

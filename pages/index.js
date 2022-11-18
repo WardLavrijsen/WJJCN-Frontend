@@ -258,13 +258,7 @@ export async function getServerSideProps(context) {
   try {
     const res = await fetch(`http://${url}/api/allbrands`);
     const data = await res.json();
-    const brands = data.data.reduce((array, item) => {
-      if (array.includes(item.brand)) {
-        return array;
-      } else {
-        return [...array, item.brand];
-      }
-    }, []);
+    const brands = data.data.map((brand) => brand.name);
 
     if (data.status === "error") {
       return {
@@ -284,11 +278,10 @@ export async function getServerSideProps(context) {
       };
     }
   } catch (error) {
-    console.log(error);
     return {
       props: {
         brands: null,
-        error: error,
+        error: error.message,
         errorStateServer: true,
       },
     };

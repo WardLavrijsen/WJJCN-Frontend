@@ -71,10 +71,10 @@ export default function Home({ brands, error, errorStateServer }) {
   const setSimilarity = (value) => {
     const suggestions = brands.filter((brand) => {
       if (!value) return false;
-      if (similarity(brand.retailers, value) >= 0.7) return true;
-      if (brand.retailers.toLowerCase().includes(value.toLowerCase()))
+      if (similarity(brand.retailer, value) >= 0.7) return true;
+      if (brand.retailer.toLowerCase().includes(value.toLowerCase()))
         return true;
-      if (value.toLowerCase().includes(brand.retailers.toLowerCase()))
+      if (value.toLowerCase().includes(brand.retailer.toLowerCase()))
         return true;
       return false;
     });
@@ -161,13 +161,13 @@ export default function Home({ brands, error, errorStateServer }) {
               {data.map((brand) => {
                 return (
                   <div
-                    key={brand.retailers}
+                    key={brand.retailer}
                     style={data.length == 1 ? { width: "50%" } : {}}
                     className={cardStyles.displayCard}
                   >
                     <a href={`/${id}/${brand.retailers}`}>
                       <h2 className={cardStyles.retailertitle}>
-                        {brand.retailers}
+                        {brand.retailer}
                       </h2>
                     </a>
                     <div className={cardStyles.productenBox}>
@@ -185,12 +185,12 @@ export default function Home({ brands, error, errorStateServer }) {
                               </h4>
                             </a>
                             <p className={cardStyles.scoreName}>
-                              {product.score} Similarity
+                              {product.score}% Similarity
                             </p>
                             <div className={cardStyles.progressBar}>
                               <div
                                 style={{
-                                  width: `${product.score}`,
+                                  width: `${product.score}%`,
                                   backgroundColor:
                                     parseInt(product.score) >= 50
                                       ? parseInt(product.score) >= 75
@@ -254,10 +254,11 @@ export async function getServerSideProps(context) {
       `http://${url}/api/retailerbybrand?name=${context.query.id}`
     );
     const data = await res.json();
-    if (data.status === "error") {
+
+    if (data.data.errorMessage) {
       return {
         props: {
-          error: "Data kan niet opgehaald worden",
+          error: data.data.errorMessage,
           errorStateServer: true,
         },
       };
