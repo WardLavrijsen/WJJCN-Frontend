@@ -8,6 +8,22 @@
   display: flex;
   justify-content: center;
   align-content: center;
+  opacity: 1;
+  transition: 0.5s;
+}
+
+.Fadein {
+  height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+  padding: 4rem 0;
+  flex: 1;
+  gap: 30px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  opacity: 0.1;
+  transition: 0.5s;
 }
 
 .search {
@@ -41,6 +57,13 @@
   font-size: 1rem;
   padding: 0.7rem 2rem;
   width: 100%;
+  border: 0;
+  outline: none;
+}
+
+.Searchbar:focus {
+  outline: none !important;
+  border: 0 !important;
 }
 
 .Searchbox {
@@ -72,8 +95,9 @@
 
 .logo {
   position: absolute;
-  top: 2rem;
-  left: 2rem;
+  top: 3vh;
+  left: 3vw;
+  height: 10vh;
 }
 
 .autocompleteItems {
@@ -153,4 +177,31 @@
   color: black;
   border-radius: 31px;
   margin-top: 20px;
+}
+
+.fourTitle {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--second-text-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.fourUnderTitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--second-text-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.fourLink {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--second-text-color);
+  margin-bottom: 1rem;
+  text-align: center;
+  color: black;
+  background-color: white;
+  padding: 0.2rem 0.7rem;
+  border-radius: 31px;
 }
