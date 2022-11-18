@@ -23,6 +23,9 @@ export default function Product({ products, error }) {
   console.log(products);
 
   const previousRetailer = () => {
+    if (products.length === 0) {
+      return;
+    }
     let index = router.query.sort;
     let productName;
 
@@ -38,6 +41,9 @@ export default function Product({ products, error }) {
   };
 
   const nextRetailer = () => {
+    if (products.length === 0) {
+      return;
+    }
     let index = router.query.sort;
     let productName;
 
@@ -75,7 +81,7 @@ export default function Product({ products, error }) {
             <h2>Probeer later opnieuw</h2>
           </div>
         ) : (
-          <div className={gridStyles.parentProduct}>
+          <div>
             <div className={gridStyles.divRetailerCard}>
               <Link href="/">
                 <img
@@ -92,18 +98,18 @@ export default function Product({ products, error }) {
                 />
                 <div className={productStyles.displayCardContainer}>
                   <div className={productStyles.displayCardContainerDiv1}>
-                    <h5>{product.retailer}</h5>
-                    <p>{product.score}% Similarity</p>
+                    <h5>{product ? product.retailer : null}</h5>
+                    <p>{product ? product.score : null}% Similarity</p>
                     <div className={productStyles.progressBarContainer}>
                       <div
                         style={{
-                          width: `${product.score}%`,
+                          width: `${product ? product.score : null}%`,
                           backgroundColor:
-                            parseInt(product.score) >= 50
-                              ? parseInt(product.score) >= 75
+                            parseInt(product ? product.score : null) >= 50
+                              ? parseInt(product ? product.score : null) >= 75
                                 ? "#2ecc71"
                                 : "#F1C40F"
-                              : parseInt(product.score) >= 25
+                              : parseInt(product ? product.score : null) >= 25
                               ? "#E67E22"
                               : "#E74C3C",
                         }}
@@ -132,7 +138,7 @@ export default function Product({ products, error }) {
             </div>
             <div style={{ display: "flex" }}>
               <Card>
-                {products.map((product) => {
+                {products ? products.map((product) => {
                   return (
                     <div key={product._id.$oid}>
                       <button onClick={() => clickRetailer(product.product, products.findIndex(object => {
@@ -142,14 +148,14 @@ export default function Product({ products, error }) {
                       </button>
                     </div>
                   );
-                })}
+                }) : null}
               </Card>
               <br></br>
               <Accordion
                 alwaysOpen={false}
                 style={{ backgroundColor: "white" }}
               >
-                {Object.entries(product.product_brand).map(([key, value]) => {
+                {product ? Object.entries(product.product_brand).map(([key, value]) => {
                   return (
                     <Accordion.Panel key={key}>
                       <Accordion.Title>
@@ -178,7 +184,7 @@ export default function Product({ products, error }) {
                       </Accordion.Content>
                     </Accordion.Panel>
                   );
-                })}
+                }) : null}
               </Accordion>
             </div>
           </div>
