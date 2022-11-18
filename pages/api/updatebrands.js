@@ -2,11 +2,16 @@
 
 import axios from "axios";
 
-export default async function AllBrands(req, res) {
+export default async function login(req, res) {
   try {
-    const resonse = await axios.get(`${process.env.API_URL}/brand`, {
+    const body = JSON.parse(req.body);
+    const resonse = await axios.get(`${process.env.API_URL}/update_retailers`, {
       headers: {
         "x-api-key": process.env.API_KEY,
+      },
+      data: {
+        retailers: body.retailers,
+        token: body.token,
       },
     });
 
