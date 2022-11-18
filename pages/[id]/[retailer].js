@@ -4,11 +4,11 @@ import productStyles from "../../styles/Product.module.css";
 import retailerProductBoxStyles from "../../styles/RetailerProductBox.module.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Accordion, Card } from "flowbite-react";
+import { Accordion } from "flowbite-react";
 import Link from "next/link";
 import { BsArrowUp } from "react-icons/bs";
 import { BsArrowDown } from "react-icons/bs";
-import { useState } from "react";
+import { BsSearch } from "react-icons/bs";
 
 export default function Product({ products, error }) {
   const router = useRouter();
@@ -16,7 +16,9 @@ export default function Product({ products, error }) {
 
   const clickRetailer = (product, productsCurrentIndex) => {
     router.push(
-      `/${router.query.id}/${router.query.retailer}?product=${product}&sort=${productsCurrentIndex}`, undefined, {shallow: true}
+      `/${router.query.id}/${router.query.retailer}?product=${product}&sort=${productsCurrentIndex}`,
+      undefined,
+      { shallow: true }
     );
   };
 
@@ -29,14 +31,12 @@ export default function Product({ products, error }) {
     let index = router.query.sort;
     let productName;
 
-    if (index==0)
-    {
-      productName = products[products.length-1].product;
-      clickRetailer(productName, products.length-1)
-    }
-    else {
-      productName = products[index-1].product;
-      clickRetailer(productName, index-1)
+    if (index == 0) {
+      productName = products[products.length - 1].product;
+      clickRetailer(productName, products.length - 1);
+    } else {
+      productName = products[index - 1].product;
+      clickRetailer(productName, index - 1);
     }
   };
 
@@ -47,14 +47,12 @@ export default function Product({ products, error }) {
     let index = router.query.sort;
     let productName;
 
-    if (index==products.length - 1)
-    {
+    if (index == products.length - 1) {
       productName = products[0].product;
-      clickRetailer(productName, 0)
-    }
-    else {
+      clickRetailer(productName, 0);
+    } else {
       productName = products[+index + 1].product;
-      clickRetailer(productName, +index + 1)
+      clickRetailer(productName, +index + 1);
     }
   };
 
@@ -136,56 +134,83 @@ export default function Product({ products, error }) {
                 </div>
               </div>
             </div>
-            <div style={{ display: "flex" }}>
-              <Card>
-                {products ? products.map((product) => {
-                  return (
-                    <div key={product._id.$oid}>
-                      <button onClick={() => clickRetailer(product.product, products.findIndex(object => {
-                        return object.product === product.product;
-                      }))}>
-                        {product.product}
-                      </button>
-                    </div>
-                  );
-                }) : null}
-              </Card>
+            <div>
+              <h3 style={{ color: "white" }}>BreadCrumbs</h3>
+            </div>
+            <div className={productStyles.productContainer}>
+              <div className={productStyles.productNamesCard}>
+                  <div>
+                    <h3>Product:</h3>
+                  </div>
+                  <div className={productStyles.productSearch}>
+                    <p>Search here...</p>
+                    <BsSearch />
+                  </div>
+                {products
+                  ? products.map((product) => {
+                      return (
+                        <div className={productStyles.productNames} key={product._id.$oid}>
+                          <button
+                            onClick={() =>
+                              clickRetailer(
+                                product.product,
+                                products.findIndex((object) => {
+                                  return object.product === product.product;
+                                })
+                              )
+                            }
+                          >
+                            {product.product}
+                          </button>
+                        </div>
+                      );
+                    })
+                  : null}
+              </div>
               <br></br>
-              <Accordion
-                alwaysOpen={false}
-                style={{ backgroundColor: "white" }}
-              >
-                {product ? Object.entries(product.product_brand).map(([key, value]) => {
-                  return (
-                    <Accordion.Panel key={key}>
-                      <Accordion.Title>
-                        <div style={{ display: "flex" }}>
-                          <h3>{key}:</h3>
-                          <p>overeenkomst: ja/nee</p>
-                        </div>
-                      </Accordion.Title>
-                      <Accordion.Content style={{ backgroundColor: "white" }}>
-                        <div style={{ display: "flex" }}>
-                          <div>
-                            <h3>Product from WoC</h3>
-                            <br></br>
-                            <h6>Text:</h6>
-                            <br></br>
-                            <p>{value}</p>
-                          </div>
-                          <div>
-                            <h3>Product from retailer</h3>
-                            <br></br>
-                            <h6>Text:</h6>
-                            <br></br>
-                            <p>{product.product_scraped[key]}</p>
-                          </div>
-                        </div>
-                      </Accordion.Content>
-                    </Accordion.Panel>
-                  );
-                }) : null}
-              </Accordion>
+              <div className={productStyles.accordionContainer}>
+                <Accordion
+                  alwaysOpen={false}
+                  style={{ backgroundColor: "white" }}
+                >
+                  {product
+                    ? Object.entries(product.product_brand).map(
+                        ([key, value]) => {
+                          return (
+                            <Accordion.Panel key={key}>
+                              <Accordion.Title>
+                                <div style={{ display: "flex" }}>
+                                  <h3>{key}:</h3>
+                                  <p>overeenkomst: ja/nee</p>
+                                </div>
+                              </Accordion.Title>
+                              <Accordion.Content
+                                style={{ backgroundColor: "white" }}
+                              >
+                                <div style={{ display: "flex" }}>
+                                  <div>
+                                    <h3>Product from WoC</h3>
+                                    <br></br>
+                                    <h6>Text:</h6>
+                                    <br></br>
+                                    <p>{value}</p>
+                                  </div>
+                                  <div>
+                                    <h3>Product from retailer</h3>
+                                    <br></br>
+                                    <h6>Text:</h6>
+                                    <br></br>
+                                    <p>{product.product_scraped[key]}</p>
+                                  </div>
+                                </div>
+                              </Accordion.Content>
+                            </Accordion.Panel>
+                          );
+                        }
+                      )
+                    : <Accordion.Panel><Accordion.Content><h1> Error </h1></Accordion.Content> </Accordion.Panel>}
+                </Accordion>
+              </div>
             </div>
           </div>
         )}
@@ -202,7 +227,7 @@ export async function getServerSideProps(context) {
       `http://${url}/api/product?name=${context.query.id}&retailer=${context.query.retailer}`
     );
     let data = await res.json();
-    console.log("Fetched data...")
+    console.log("Fetched data...");
     const datametscore = data.data.map((product) => {
       let goed = 0;
       Object.entries(product.product_brand).forEach(([key, value]) => {

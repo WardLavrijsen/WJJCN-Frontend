@@ -68,3 +68,41 @@
     color: white;
     float: right;
 }
+
+.productContainer {
+    display: flex;
+    margin-top: 25px;
+}
+
+.productNamesCard {
+    background-color: white;
+    height: 68vh;
+    width: 30%;
+    min-width: 25%;
+    border-radius: 31px;
+    padding: 2rem;
+    margin-right: 25px;
+}
+
+.productNamesCard h3 {
+    float: left;
+    font-weight: bold;
+    margin-right: 100px;
+}
+
+.productNames {
+    font-weight: bold;
+}
+
+.productNames:hover {
+    color: #3A87E9;
+    background-color: #F4F8FB;
+}
+
+.productSearch {
+    display: flex;
+}
+
+.accordionContainer {
+    width: 100%;
+}
