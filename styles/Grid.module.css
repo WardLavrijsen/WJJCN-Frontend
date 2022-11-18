@@ -103,3 +103,15 @@
   width: 50px;
   border-radius: 50%;
 }
+
+.parentProduct {
+  display: grid;
+  height: 100%;
+  width: 100%;
+}
+
+.divRetailerCard{
+  display: flex;
+  justify-content: center;
+
+}
