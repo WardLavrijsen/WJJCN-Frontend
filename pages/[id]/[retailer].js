@@ -131,29 +131,9 @@ export default function Product({ products, error }) {
                       <BsArrowDown className={productStyles.arrowUpIcon} />
                     </button>
                   </div>
-            <div style={{ display: "flex" }}>
-              <Card>
-                <h5>IMAGE WoC</h5>
-              </Card>
-              <Card>
-                <div style={{ display: "flex" }}>
-                  <h5>{product.retailer}</h5>
-                  <button
-                    style={{ backgroundColor: "lightBlue" }}
-                    onClick={() => previousRetailer()}
-                  >
-                    Previous Retailer
-                  </button>
                 </div>
-                <div style={{ display: "flex" }}>
-                  <p>percentage% overeenkomst</p>
-                  <button
-                    style={{ backgroundColor: "lightBlue" }}
-                    onClick={() => nextRetailer()}
-                  >
-                    Next Retailer
-                  </button>
-
+              </div>
+            </div>
             <div>
               <h3 style={{ color: "white" }}>BreadCrumbs</h3>
             </div>
@@ -182,7 +162,6 @@ export default function Product({ products, error }) {
                           >
                             {product.product}
                           </button>
-
                         </div>
                       );
                     })
