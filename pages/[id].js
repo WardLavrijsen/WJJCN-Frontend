@@ -165,7 +165,7 @@ export default function Home({ brands, error, errorStateServer }) {
                     style={data.length == 1 ? { width: "50%" } : {}}
                     className={cardStyles.displayCard}
                   >
-                    <a href={`/${id}/${brand.retailers}`}>
+                    <a href={`/${id}/${brand.retailer}`}>
                       <h2 className={cardStyles.retailertitle}>
                         {brand.retailer}
                       </h2>
@@ -178,7 +178,7 @@ export default function Home({ brands, error, errorStateServer }) {
                             className={cardStyles.productBox}
                           >
                             <a
-                              href={`/${id}/${brand.retailers}?product=${product.name}`}
+                              href={`/${id}/${brand.retailer}?product=${product.name}`}
                             >
                               <h4 className={cardStyles.productName}>
                                 {product.name}

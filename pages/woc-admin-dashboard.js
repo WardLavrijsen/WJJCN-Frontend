@@ -1,14 +1,15 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import gridStyles from "../styles/Grid.module.css";
 import adminSytles from "../styles/Admin.module.css";
 
-import { useRouter } from "next/router";
+import AdminPageMenu from "../components/AdminPageMenu";
+import AdminPageSettings from "../components/AdminPageSettings";
+import AdminPageRetailers from "../components/AdminPageRetailers";
+import AdminPageScraper from "../components/AdminPageScraper";
+import AdminPageAddRetailer from "../components/AdminPageAddRetailer";
+import AdminPageBrands from "../components/AdminPageBrands";
+import AdminPageAddBrand from "../components/AdminPageAddBrand";
+
 import { useState, useEffect } from "react";
-
-import { BsFillXCircleFill, BsCheckCircleFill, BsX } from "react-icons/bs";
-
-import Link from "next/link";
 
 export default function Home({
   retailersServer,
@@ -17,15 +18,14 @@ export default function Home({
   errorStateServer,
   token,
   logs,
+  date,
+  time,
+  brandsServer,
 }) {
-  const router = useRouter();
+  const [active, setActive] = useState("brands");
 
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-
-  const [active, setActive] = useState("retailers");
   const [retailers, setRetailers] = useState(retailersServer);
-  // const [retailers, setRetailers] = useState([]);
+  const [brands, setBrands] = useState(brandsServer);
 
   const [errorForErrorPage, setErrorForErrorPage] = useState("");
 
@@ -35,77 +35,11 @@ export default function Home({
 
   const [pageLoad, setPageLoad] = useState(false);
 
-  const updateRetailers = async () => {
-    const response = await fetch("/api/updatebrands", {
-      method: "POST",
-      body: JSON.stringify({
-        retailers: retailers.map((r) => {
-          r.scrape = r.scrape ? "true" : "false";
-          return r;
-        }),
-        token: token,
-      }),
-    });
-    if (response.status === 200) {
-      setError("Retailers are updated!");
-      setErrorState(true);
-      setErrorColor("#27ae60");
-
-      setTimeout(() => {
-        setErrorState(false);
-        router.reload(window.location.pathname);
-      }, 2000);
-    } else {
-      setError("Something went wrong!");
-      setErrorState(true);
-      setErrorColor("#c0392b");
-
-      setTimeout(() => {
-        setErrorState(false);
-      }, 2000);
-    }
-  };
-
   useEffect(() => {
     setTimeout(() => {
       setPageLoad(true);
     }, 10);
   }, []);
-
-  const handleAddRetailer = (e) => {
-    e.preventDefault();
-    console.log(e);
-  };
-
-  const handlePasswordChange = async (e) => {
-    e.preventDefault();
-    if (password !== passwordConfirm) {
-      setError("Passwords do not match");
-      setErrorState(true);
-      setTimeout(() => {
-        setErrorState(false);
-      }, 2000);
-    } else {
-      const res = await fetch(
-        `/api/newpassword?password=${password}&token=${router.query.token}`
-      );
-      const response = await res.json();
-      if (response.status === "ok") {
-        setError("Password changed successfully");
-        setErrorState(true);
-        setErrorColor("#27ae60");
-
-        setTimeout(() => {
-          setErrorState(false);
-          router.push("/woc-admin");
-        }, 3000);
-      }
-    }
-  };
-
-  const logout = () => {
-    router.push("/woc-admin");
-  };
 
   return (
     <div>
@@ -117,41 +51,26 @@ export default function Home({
 
       <main className={pageLoad ? adminSytles.main : adminSytles.Fadein}>
         <div className={adminSytles.parent}>
-          <div className={adminSytles.div1}>
-            <div
-              className={styles.errorBox}
-              style={
-                errorState
-                  ? { display: "block", backgroundColor: errorColor }
-                  : { display: "none" }
-              }
-            >
-              <h3>{getError}</h3>
-            </div>
-            <Link style={{ cursor: "pointer" }} href={"/"}>
-              <img
-                style={{ cursor: "pointer" }}
-                className={styles.logo}
-                alt="world of content logo"
-                src="/images/w-logo.png"
-              />
-            </Link>
-            <div className={adminSytles.buttonLinks}>
-              <button className={adminSytles.statusButtons}>
-                Strart Scraper
-              </button>
-              <button className={adminSytles.statusButtons}>
-                Stop Scraper
-              </button>
-              <button onClick={logout} className={adminSytles.statusButtons}>
-                Log Out!
-              </button>
-            </div>
-          </div>
+          <AdminPageMenu
+            errorState={errorState}
+            errorMessage={getError}
+            errorColor={errorColor}
+          />
           <div className={adminSytles.div2}>
             <div className={adminSytles.displayCard}>
               <button
                 className={adminSytles.tab1}
+                style={
+                  active === "brands"
+                    ? { backgroundColor: "white", border: "1px solid black" }
+                    : { backgroundColor: "#d8d8d8" }
+                }
+                onClick={() => setActive("brands")}
+              >
+                Brands
+              </button>
+              <button
+                className={adminSytles.tab2}
                 style={
                   active === "retailers"
                     ? { backgroundColor: "white", border: "1px solid black" }
@@ -162,7 +81,7 @@ export default function Home({
                 Retailers
               </button>
               <button
-                className={adminSytles.tab2}
+                className={adminSytles.tab3}
                 style={
                   active === "scraper"
                     ? { backgroundColor: "white", border: "1px solid black" }
@@ -172,230 +91,34 @@ export default function Home({
               >
                 Scraper
               </button>
-              <div
-                className={adminSytles.infobox}
-                style={
-                  active === "retailers"
-                    ? { display: "block" }
-                    : { display: "none" }
-                }
-              >
-                <div className={adminSytles.titlebox}>
-                  <h1 className={adminSytles.titleintitlebox}>Retailers</h1>
-                  <div>
-                    <button
-                      style={{ marginRight: "1rem" }}
-                      className={adminSytles.buttonintitlebox}
-                      onClick={() => {
-                        setActive("addRetailer");
-                        setRetailers(JSON.parse(JSON.stringify(orgRetailers)));
-                      }}
-                    >
-                      Toevoegen
-                    </button>
-                    <button
-                      style={{ marginRight: "1rem" }}
-                      className={adminSytles.buttonintitlebox}
-                      onClick={() => {
-                        setRetailers(JSON.parse(JSON.stringify(orgRetailers)));
-                      }}
-                    >
-                      Reset
-                    </button>
-                    <button
-                      onClick={updateRetailers}
-                      className={adminSytles.buttonintitlebox}
-                    >
-                      Save
-                    </button>
-                  </div>
-                </div>
-
-                <div className={adminSytles.headerbox}>
-                  <div className={adminSytles.headerboxScrape}>Scrape</div>
-                  <div className={adminSytles.headerboxName}>Name</div>
-                  <div className={adminSytles.headerboxUrl}>Scrape URL</div>
-                </div>
-                <div className={adminSytles.retailersbox}>
-                  {retailers.map((retailer, index) => {
-                    return (
-                      <div key={index} className={adminSytles.retailerbox}>
-                        <div className={adminSytles.retailerboxScrape}>
-                          <input
-                            checked={retailer.scrape}
-                            className={adminSytles.checkbox}
-                            type="checkbox"
-                            onChange={(e) => {
-                              const newRetailers = [...retailers];
-                              newRetailers[index].scrape = e.target.checked;
-                              setRetailers(newRetailers);
-                            }}
-                          />
-                        </div>
-                        <div className={adminSytles.retailerboxName}>
-                          <input
-                            value={retailer.name}
-                            className={adminSytles.retailerboxNameInput}
-                            type="text"
-                            onChange={(e) => {
-                              const newRetailers = [...retailers];
-                              newRetailers[index].name = e.target.value;
-                              setRetailers(newRetailers);
-                            }}
-                          />
-                        </div>
-                        <div className={adminSytles.retailerboxUrl}>
-                          <input
-                            value={retailer.url_to_scrape}
-                            className={adminSytles.retailerboxNameInput}
-                            type="text"
-                            onChange={(e) => {
-                              const newRetailers = [...retailers];
-                              newRetailers[index].url_to_scrape =
-                                e.target.value;
-                              setRetailers(newRetailers);
-                            }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div
-                className={adminSytles.infobox}
-                style={
-                  active === "scraper"
-                    ? { display: "block" }
-                    : { display: "none" }
-                }
-              >
-                <div className={adminSytles.titlebox}>
-                  <h1 className={adminSytles.titleintitlebox}>Scraper</h1>
-                  <h3 className={adminSytles.savedintitlebox}>
-                    Last scraped on: {logs[0].date_run}
-                  </h3>
-                </div>
-                <div className={adminSytles.headerbox}>
-                  <div className={adminSytles.headerboxStatus}>Status</div>
-                  <div className={adminSytles.headerboxRetailerName}>Name</div>
-                  <div className={adminSytles.headerboxStep}>Step 1</div>
-                  <div className={adminSytles.headerboxStep}>Step 2</div>
-                  <div className={adminSytles.headerboxStep}>Step 3</div>
-                  <div className={adminSytles.headerboxStep}>Step 4</div>
-                </div>
-                <div className={adminSytles.retailersbox}>
-                  {logs.map((retailer) => {
-                    {
-                      if (
-                        retailer.steps.link_crawling.status &&
-                        retailer.steps.link_check.status &&
-                        retailer.steps.product_fetch_compare.status &&
-                        retailer.steps.save_to_database.status
-                      ) {
-                        retailer.isgood = true;
-                      } else {
-                        retailer.isgood = false;
-                      }
-                    }
-                    return (
-                      <div
-                        key={retailer._id}
-                        className={adminSytles.retailerbox}
-                      >
-                        <div className={adminSytles.scraperboxStatus}>
-                          <div>
-                            {retailer.isgood ? (
-                              <BsCheckCircleFill
-                                className={adminSytles.okicon}
-                              />
-                            ) : (
-                              <BsFillXCircleFill
-                                className={adminSytles.erroricon}
-                              />
-                            )}
-                          </div>
-                        </div>
-                        <div className={adminSytles.scraperboxName}>
-                          {retailer.retailer["$oid"]}
-                        </div>
-                        <div className={adminSytles.scraperboxStep}>
-                          {retailer.steps.link_crawling.status ? (
-                            <BsCheckCircleFill className={adminSytles.okicon} />
-                          ) : (
-                            <button
-                              onClick={() => {
-                                setErrorForErrorPage(
-                                  retailer.steps.link_crawling.error
-                                );
-                                setActive("error");
-                              }}
-                              className={adminSytles.errorBox}
-                            >
-                              <BsX className={adminSytles.erroriconsmall} />
-                              Info
-                            </button>
-                          )}
-                        </div>
-                        <div className={adminSytles.scraperboxStep}>
-                          {retailer.steps.link_check.status ? (
-                            <BsCheckCircleFill className={adminSytles.okicon} />
-                          ) : (
-                            <button
-                              onClick={() => {
-                                setErrorForErrorPage(
-                                  retailer.steps.link_check.error
-                                );
-                                setActive("error");
-                              }}
-                              className={adminSytles.errorBox}
-                            >
-                              <BsX className={adminSytles.erroriconsmall} />
-                              Info
-                            </button>
-                          )}
-                        </div>
-                        <div className={adminSytles.scraperboxStep}>
-                          {retailer.steps.product_fetch_compare.status ? (
-                            <BsCheckCircleFill className={adminSytles.okicon} />
-                          ) : (
-                            <button
-                              onClick={() => {
-                                setErrorForErrorPage(
-                                  retailer.steps.product_fetch_compare.error
-                                );
-                                setActive("error");
-                              }}
-                              className={adminSytles.errorBox}
-                            >
-                              <BsX className={adminSytles.erroriconsmall} />
-                              Info
-                            </button>
-                          )}
-                        </div>
-                        <div className={adminSytles.scraperboxStep}>
-                          {retailer.steps.save_to_database.status ? (
-                            <BsCheckCircleFill className={adminSytles.okicon} />
-                          ) : (
-                            <button
-                              onClick={() => {
-                                setErrorForErrorPage(
-                                  retailer.steps.save_to_database.error
-                                );
-                                setActive("error");
-                              }}
-                              className={adminSytles.errorBox}
-                            >
-                              <BsX className={adminSytles.erroriconsmall} />
-                              Info
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+              <AdminPageBrands
+                setActive={setActive}
+                active={active}
+                token={token}
+                setError={setError}
+                setErrorState={setErrorState}
+                setErrorColor={setErrorColor}
+                brands={brands}
+                setBrands={setBrands}
+              />
+              <AdminPageRetailers
+                setActive={setActive}
+                retailersServer={retailersServer}
+                active={active}
+                token={token}
+                setError={setError}
+                setErrorState={setErrorState}
+                setErrorColor={setErrorColor}
+                orgRetailers={orgRetailers}
+                retailers={retailers}
+                setRetailers={setRetailers}
+              />
+              <AdminPageScraper
+                logs={logs}
+                active={active}
+                setActive={setActive}
+                setErrorForErrorPage={setErrorForErrorPage}
+              />
               <div
                 className={adminSytles.infobox}
                 style={
@@ -419,125 +142,37 @@ export default function Home({
                   {errorForErrorPage}
                 </h3>
               </div>
-              <div
-                className={adminSytles.infobox}
-                style={
-                  active === "addRetailer"
-                    ? { display: "block" }
-                    : { display: "none" }
-                }
-              >
-                <div className={adminSytles.titlebox}>
-                  <h1 className={adminSytles.titleintitlebox}>Add Retailer</h1>
-                  <div>
-                    <button
-                      onClick={() => setActive("retailers")}
-                      className={adminSytles.buttonintitlebox}
-                    >
-                      Go Back
-                    </button>
-                  </div>
-                </div>
-                <form
-                  onSubmit={handleAddRetailer}
-                  className={adminSytles.addRetailerForm}
-                >
-                  <div className={adminSytles.inputDiv}>
-                    <label htmlFor="scrape">Scrape:</label>
-                    <input
-                      className={adminSytles.checkbox}
-                      type="checkbox"
-                      name="scrape"
-                      id="scrape"
-                    ></input>
-                  </div>
-                  <div className={adminSytles.inputDiv}>
-                    <label htmlFor="name">Name:</label>
-                    <input type="text" name="name" id="name" required></input>
-                  </div>
-                  <div className={adminSytles.inputDiv}>
-                    <label htmlFor="base-url">Base-URL:</label>
-                    <input
-                      type="url"
-                      name="base-url"
-                      id="base-url"
-                      required
-                    ></input>
-                  </div>
-                  <div className={adminSytles.inputDiv}>
-                    <label htmlFor="scrape-url">Scrape-URL:</label>
-                    <input
-                      type="url"
-                      name="scrape-url"
-                      id="scrape-url"
-                      required
-                    ></input>
-                  </div>
-                  <input
-                    className={adminSytles.addRetailerSubmitButton}
-                    type="submit"
-                    name="submitbutton"
-                  ></input>
-                </form>
-              </div>
+              <AdminPageAddRetailer
+                active={active}
+                setActive={setActive}
+                token={token}
+                setError={setError}
+                setErrorState={setErrorState}
+                setErrorColor={setErrorColor}
+                retailers={retailers}
+                setRetailers={setRetailers}
+              />
+              <AdminPageAddBrand
+                active={active}
+                setActive={setActive}
+                retailers={retailers}
+                token={token}
+                setError={setError}
+                setErrorState={setErrorState}
+                setErrorColor={setErrorColor}
+                brands={brands}
+                setBrands={setBrands}
+              />
             </div>
           </div>
-          <div className={adminSytles.div3}>
-            <div className={adminSytles.displayCardSettings}>
-              <h1 className={adminSytles.settingsTitle}>Settings</h1>
-              <h3 className={adminSytles.settingsLabel}>Day to run scraper:</h3>
-              <select className={adminSytles.settingsInput} type="text">
-                <option value="monday">Monday</option>
-                <option value="tuesday">Tuesday</option>
-                <option value="wednesday">Wednesday</option>
-                <option value="thursday">Thursday</option>
-                <option value="friday">Friday</option>
-                <option value="saturday">Saturday</option>
-                <option value="sunday">Sunday</option>
-              </select>
-              <h3
-                style={{ marginTop: "1vh" }}
-                className={adminSytles.settingsLabel}
-              >
-                Time to run scraper:
-              </h3>
-              <input className={adminSytles.settingsInput} type="time" />
-              <button className={adminSytles.settingsButton}>
-                Save Settings
-              </button>
-
-              <h3
-                style={{ marginTop: "3vh" }}
-                className={adminSytles.settingsLabel}
-              >
-                New Password:
-              </h3>
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={adminSytles.settingsInput}
-                type="password"
-              />
-              <h3
-                style={{ marginTop: "1vh" }}
-                className={adminSytles.settingsLabel}
-              >
-                Confirm Password:
-              </h3>
-              <input
-                value={passwordConfirm}
-                onChange={(e) => setPasswordConfirm(e.target.value)}
-                className={adminSytles.settingsInput}
-                type="password"
-              />
-              <button
-                onClick={handlePasswordChange}
-                className={adminSytles.settingsButton}
-              >
-                Update Password
-              </button>
-            </div>
-          </div>
+          <AdminPageSettings
+            token={token}
+            setError={setError}
+            setErrorState={setErrorState}
+            setErrorColor={setErrorColor}
+            date={date}
+            time={time}
+          />
         </div>
       </main>
     </div>
@@ -557,63 +192,48 @@ export async function getServerSideProps(context) {
       };
     }
 
-    const res = await fetch(
-      `http://${url}/api/verify?token=${context.query.token}`
+    // const notification = await fetch(
+    //   `https://ntfy.sh/WOC_Live_Score_push_notifications`,
+    //   {
+    //     method: "POST", // PUT works too
+    //     body: "Login to WOC Admin Dashboard", // string or object
+    //   }
+    // );
+
+    const AllRes = await fetch(
+      `http://${url}/api/getadminpagecontent?token=${context.query.token}`
     );
-    const data = await res.json();
+    const AllData = await AllRes.json();
 
-    const resLogs = await fetch(
-      `http://${url}/api/getlogs?token=${context.query.token}`
-    );
-    const dataLogs = await resLogs.json();
-
-    const retailersResponse = await fetch(`http://${url}/api/allretailers`);
-    const retailersData = await retailersResponse.json();
-
-    const retailers = retailersData.data.map((r) => {
+    const retailers = AllData.data.allRetailers.map((r) => {
       r.scrape = r.scrape === "true" ? true : false;
       return r;
     });
 
     const orgRetailers = JSON.parse(JSON.stringify(retailers));
 
-    if (data.data.statuscode === 200) {
-      if (retailersData.status === "ok") {
-        if (dataLogs.status === "ok") {
-          console.log({
-            logs: dataLogs.data,
-            token: context.query.token,
-            retailersServer: retailers,
-            orgRetailers: orgRetailers,
-            error: "",
-            errorStateServer: false,
-          });
-          return {
-            props: {
-              logs: dataLogs.data,
-              token: context.query.token,
-              retailersServer: retailers,
-              orgRetailers: orgRetailers,
-              error: "",
-              errorStateServer: false,
-            },
-          };
-        } else {
-          return {
-            props: {
-              error: "Kon logs niet ophalen",
-              errorStateServer: true,
-            },
-          };
-        }
-      } else {
-        return {
-          props: {
-            error: "Geen Retailers gevonden",
-            errorStateServer: true,
-          },
-        };
-      }
+    if (!AllData.data) {
+      return {
+        props: {
+          error: "Error met ophalen API",
+          errorStateServer: true,
+        },
+      };
+    }
+    if (AllData.status == "ok") {
+      return {
+        props: {
+          date: AllData.data.allAdminSettings[0].day_to_scrape,
+          time: AllData.data.allAdminSettings[0].time_to_scrape,
+          logs: AllData.data.allLogs,
+          token: context.query.token,
+          retailersServer: retailers,
+          orgRetailers: orgRetailers,
+          error: "",
+          errorStateServer: false,
+          brandsServer: AllData.data.allBrands,
+        },
+      };
     } else {
       return {
         redirect: {
