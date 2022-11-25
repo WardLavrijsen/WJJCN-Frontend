@@ -1,0 +1,75 @@
+.savedintitlebox {
+  font-size: 0.85rem;
+  font-weight: 200;
+}
+
+.headerboxStatus {
+  height: 100%;
+  width: 10%;
+  display: flex;
+  align-items: center;
+}
+
+.headerboxRetailerName {
+  height: 100%;
+  width: 30%;
+  display: flex;
+  align-items: center;
+}
+
+.headerboxStep {
+  height: 100%;
+  width: 15%;
+  display: flex;
+  align-items: center;
+}
+
+.scraperboxStatus {
+  height: 100%;
+  width: 10%;
+  display: flex;
+  align-items: center;
+}
+
+.scraperboxName {
+  height: 100%;
+  width: 30%;
+  display: flex;
+  align-items: center;
+}
+
+.scraperboxStep {
+  height: 100%;
+  width: 15%;
+  display: flex;
+  align-items: center;
+}
+
+.erroricon {
+  height: 3.5vh;
+  width: 3.5vh;
+  color: red;
+}
+
+.okicon {
+  height: 3.5vh;
+  width: 3.5vh;
+  color: green;
+}
+
+.errorBox {
+  height: 3.5vh;
+  width: 70%;
+  border-radius: 50px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: red;
+}
+
+.erroriconsmall {
+  height: 3.5vh;
+  width: 3.5vh;
+  font-size: 1.2rem;
+}

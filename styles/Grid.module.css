@@ -18,7 +18,7 @@
 
 .breadcrums {
   position: absolute;
-  top: 9rem;
+  top: 75%;
   color: white;
   left: 55px;
   display: flex;
@@ -57,12 +57,28 @@
 .main {
   height: 100vh;
   width: 100vw;
+  opacity: 1;
+  transition: 0.5s;
+}
+
+.Fadein {
+  height: 100vh;
+  width: 100vw;
+  opacity: 0.1;
+  transition: 0.5s;
 }
 
 .Searchbar {
   font-size: 1rem;
   padding: 0.7rem 2rem;
   width: 100%;
+  border: 0;
+  outline: none;
+}
+
+.Searchbar:focus {
+  outline: none !important;
+  border: 0 !important;
 }
 
 .Searchbox {
@@ -102,4 +118,16 @@
   height: 50px;
   width: 50px;
   border-radius: 50%;
+}
+
+.parentProduct {
+  display: grid;
+  height: 100%;
+  width: 100%;
+}
+
+.divRetailerCard{
+  display: flex;
+  justify-content: center;
+
 }

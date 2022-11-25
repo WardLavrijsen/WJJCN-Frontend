@@ -1,0 +1,72 @@
+.addRetailerForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 80%;
+  max-width: 70%;
+  width: 70%;
+  height: 80%;
+  padding-left: 5vw;
+  padding-bottom: 3vw;
+  gap: 3vh;
+}
+.inputDivName {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 15%;
+  margin-top: 5%;
+}
+
+.inputDivRetailers {
+  gap: 2px;
+  height: 68%;
+}
+
+.flexdiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5vh;
+}
+
+.totalRetailersBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-height: 85%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.retailersInFlexBox {
+  height: 5vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+}
+
+.RetailerName {
+  font-size: 1.1rem;
+}
+
+.checkmark {
+  height: 3vh;
+  width: 3vh;
+  margin-left: 8px;
+}
+
+.retailersLabel {
+  height: 10%;
+}
+
+.addRetailerSubmitButton {
+  background-color: #3a74e1;
+  padding: 0.8vw 1.5vw;
+  border-radius: 5px;
+  color: white;
+  font-size: 1.1rem;
+  height: 12%;
+  width: 40%;
+  cursor: pointer;
+}

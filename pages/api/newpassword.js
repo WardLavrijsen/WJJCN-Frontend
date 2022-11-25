@@ -2,11 +2,15 @@
 
 import axios from "axios";
 
-export default async function AllBrands(req, res) {
+export default async function login(req, res) {
   try {
-    const resonse = await axios.get(`${process.env.API_URL}/brand`, {
+    const resonse = await axios.get(`${process.env.API_URL}/update_password`, {
       headers: {
         "x-api-key": process.env.API_KEY,
+      },
+      data: {
+        password: req.query.password,
+        token: req.query.token,
       },
     });
 

@@ -1,0 +1,77 @@
+.headerboxName {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.headerboxTotalRetailers {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.headerboxRetailers {
+  height: 100%;
+  width: 35%;
+  display: flex;
+  align-items: center;
+}
+
+.headerboxEdit {
+  height: 100%;
+  width: 10%;
+  display: flex;
+  align-items: center;
+}
+
+.brandboxName {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.brandTitle {
+  max-width: 90%;
+  overflow: hidden;
+}
+
+.brandboxTotaalRetailers {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.brandboxRetailers {
+  height: 100%;
+  max-width: 55%;
+  width: 35%;
+  display: flex;
+  align-items: center;
+}
+
+.brandboxEditButton {
+  height: 100%;
+  width: 10%;
+  display: flex;
+  align-items: center;
+}
+
+.EditButton {
+  background-color: #3a74e1;
+  padding: 0.6vw 1.2vw;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+}
+
+.DeleteButton {
+  background-color: #e74c3c;
+  padding: 0.6vw 1.2vw;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+}

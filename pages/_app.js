@@ -41,7 +41,7 @@ export default function App({ Component, pageProps }) {
           <div className={styles.loadingText}>
             <AiOutlineLoading3Quarters size={150} />
           </div>
-          <h1 className={styles.loadingTitle}>Fetching Data...</h1>
+          <h1 className={styles.loadingTitle}>Loading...</h1>
         </main>
       ) : (
         <Component {...pageProps} />
