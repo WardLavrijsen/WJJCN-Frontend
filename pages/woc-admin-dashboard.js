@@ -204,7 +204,6 @@ export async function getServerSideProps(context) {
       `http://${url}/api/getadminpagecontent?token=${context.query.token}`
     );
     const AllData = await AllRes.json();
-
     const retailers = AllData.data.allRetailers.map((r) => {
       r.scrape = r.scrape === "true" ? true : false;
       return r;
@@ -225,7 +224,7 @@ export async function getServerSideProps(context) {
         props: {
           date: AllData.data.allAdminSettings[0].day_to_scrape,
           time: AllData.data.allAdminSettings[0].time_to_scrape,
-          logs: AllData.data.allLogs,
+          logs: AllData.data.allLogs.reverse(),
           token: context.query.token,
           retailersServer: retailers,
           orgRetailers: orgRetailers,

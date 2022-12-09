@@ -5,7 +5,7 @@ import axios from "axios";
 export default async function Products(req, res) {
   try {
     const resonse = await axios.get(
-      `${process.env.API_URL}/get_products_by_brand_and_retailer`,
+      `${process.env.API_URL}/getallproductsbybrandandretailer`,
       {
         headers: {
           "x-api-key": process.env.API_KEY,

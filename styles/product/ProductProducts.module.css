@@ -1,0 +1,49 @@
+.div2 {
+  grid-area: 3 / 1 / 10 / 3;
+  background-color: white;
+  margin: 1.5vh;
+  border-radius: 20px;
+}
+
+.TitleBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 15%;
+  border-bottom: 1px solid black;
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding-left: 2vw;
+}
+
+.productsBox {
+  height: 85%;
+  overflow-y: scroll;
+}
+
+.productTitle {
+  font-size: 1.05rem;
+  font-weight: 400;
+  text-align: left;
+  width: 100%;
+  padding-left: 2vw;
+  padding-top: 1.5vw;
+  padding-bottom: 1.5vw;
+}
+
+.productActive {
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding-left: 2vw;
+  padding-top: 1.5vw;
+  padding-bottom: 1.5vw;
+
+  color: #3a87e9;
+  background-color: #f4f8fb;
+  text-align: left;
+  width: 100%;
+}

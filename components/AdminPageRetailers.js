@@ -19,6 +19,8 @@ export default function AdminPageRetailers({
 }) {
   const router = useRouter();
 
+  const [activeInput, setActiveInput] = useState("");
+
   const updateRetailers = async () => {
     const response = await fetch("/api/updateretailers", {
       method: "POST",
@@ -141,28 +143,63 @@ export default function AdminPageRetailers({
                 />
               </div>
               <div className={adminSytles.retailerboxName}>
-                <input
-                  value={retailer.name}
-                  className={adminSytles.retailerboxNameInput}
-                  type="text"
-                  onChange={(e) => {
-                    const newRetailers = [...retailers];
-                    newRetailers[index].name = e.target.value;
-                    setRetailers(newRetailers);
-                  }}
-                />
+                {activeInput == retailer._id["$oid"] + retailer.name ? (
+                  <input
+                    value={retailer.name}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        setActiveInput("");
+                      }
+                    }}
+                    className={adminSytles.retailerboxNameInput}
+                    type="text"
+                    onChange={(e) => {
+                      const newRetailers = [...retailers];
+                      newRetailers[index].name = e.target.value;
+                      setRetailers(newRetailers);
+                    }}
+                  />
+                ) : (
+                  <h1
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      setActiveInput(retailer._id["$oid"] + retailer.name)
+                    }
+                  >
+                    {retailer.name}
+                  </h1>
+                )}
               </div>
               <div className={adminSytles.retailerboxUrl}>
-                <input
-                  value={retailer.url_to_scrape}
-                  className={adminSytles.retailerboxNameInput}
-                  type="text"
-                  onChange={(e) => {
-                    const newRetailers = [...retailers];
-                    newRetailers[index].url_to_scrape = e.target.value;
-                    setRetailers(newRetailers);
-                  }}
-                />
+                {activeInput ==
+                retailer._id["$oid"] + retailer.url_to_scrape ? (
+                  <input
+                    value={retailer.url_to_scrape}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        setActiveInput("");
+                      }
+                    }}
+                    className={adminSytles.retailerboxNameInput}
+                    type="text"
+                    onChange={(e) => {
+                      const newRetailers = [...retailers];
+                      newRetailers[index].url_to_scrape = e.target.value;
+                      setRetailers(newRetailers);
+                    }}
+                  />
+                ) : (
+                  <h1
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      setActiveInput(
+                        retailer._id["$oid"] + retailer.url_to_scrape
+                      )
+                    }
+                  >
+                    {retailer.url_to_scrape}
+                  </h1>
+                )}
               </div>
 
               <div className={adminSytles.retailerboxDelete}>

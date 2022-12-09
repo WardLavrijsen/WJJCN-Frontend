@@ -1,67 +1,61 @@
-import styles from "../../styles/Home.module.css";
-import gridStyles from "../../styles/Grid.module.css";
-import productStyles from "../../styles/Product.module.css";
-import retailerProductBoxStyles from "../../styles/RetailerProductBox.module.css";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { Accordion } from "flowbite-react";
-import Link from "next/link";
-import { BsArrowUp } from "react-icons/bs";
-import { BsArrowDown } from "react-icons/bs";
-import { BsSearch } from "react-icons/bs";
 
-export default function Product({ products, error }) {
-  const router = useRouter();
-  const { id } = router.query;
+import { useState, useEffect } from "react";
 
-  const clickRetailer = (product, productsCurrentIndex) => {
-    router.push(
-      `/${router.query.id}/${router.query.retailer}?product=${product}&sort=${productsCurrentIndex}`,
-      undefined,
-      { shallow: true }
+import productStyles from "../../styles/product/Product.module.css";
+
+import ProductPageMenu from "../../components/ProductPageMenu";
+import ProductPageProducts from "../../components/ProductPageProducts";
+import ProductPageResults from "../../components/ProductPageResults";
+import ProductPageLiveScore from "../../components/ProductPageLiveScore";
+
+import PieChartModel from "../../components/models/PieChartModel";
+
+export default function Product({
+  brandServer,
+  retailerServer,
+  productServer,
+  products,
+  error,
+}) {
+  const clickRetailer = (product) => {
+    window.history.pushState(
+      "page2",
+      "Title",
+      `/${router.query.id}/${router.query.retailer}?product=${product}`
     );
+    setUrlChange(true);
   };
 
-  console.log(products);
+  const [brand, setBrand] = useState(brandServer);
+  const [retailer, setRetailer] = useState(retailerServer);
 
-  const previousRetailer = () => {
-    if (products.length === 0) {
-      return;
-    }
-    let index = router.query.sort;
-    let productName;
+  const [currentProducts, setCurrentProducts] = useState(
+    products.filter((product) => {
+      return (
+        product.brand === brandServer && product.retailer === retailerServer
+      );
+    })
+  );
+  const [currentProduct, setCurrentProduct] = useState(
+    products.find((product) => {
+      return (
+        product.brand === brandServer &&
+        product.retailer === retailerServer &&
+        product.product === productServer
+      );
+    })
+  );
 
-    if (index == 0) {
-      productName = products[products.length - 1].product;
-      clickRetailer(productName, products.length - 1);
-    } else {
-      productName = products[index - 1].product;
-      clickRetailer(productName, index - 1);
-    }
-  };
+  const [active, setActive] = useState("Live Score");
+  const [model, setModel] = useState(false);
 
-  const nextRetailer = () => {
-    if (products.length === 0) {
-      return;
-    }
-    let index = router.query.sort;
-    let productName;
-
-    if (index == products.length - 1) {
-      productName = products[0].product;
-      clickRetailer(productName, 0);
-    } else {
-      productName = products[+index + 1].product;
-      clickRetailer(productName, +index + 1);
-    }
-  };
-
-  const product = products.find((obj) => {
-    if (router.query.product == null) {
-      return Object.values(obj);
-    }
-    return obj.product === router.query.product;
-  });
+  const [pageLoad, setPageLoad] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setPageLoad(true);
+    }, 10);
+  }, []);
 
   return (
     <div>
@@ -71,7 +65,7 @@ export default function Product({ products, error }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={productStyles.main}>
+      <main className={pageLoad ? productStyles.main : productStyles.Fadein}>
         {error ? (
           <div className="flex items-center justify-center gap-2 flex-col bg-red-600 text-white p-7 rounded-xl">
             <h1 className="text-3xl">ERROR:</h1>
@@ -79,138 +73,68 @@ export default function Product({ products, error }) {
             <h2>Probeer later opnieuw</h2>
           </div>
         ) : (
-          <div>
-            <div className={gridStyles.divRetailerCard}>
-              <Link href="/">
-                <img
-                  className={styles.logo}
-                  alt="WoC logo"
-                  src="/images/w-logo.png"
-                ></img>
-              </Link>
-              <div className={productStyles.displayCard}>
-                <img
-                  className={productStyles.retailerLogo}
-                  alt="Retailer logo"
-                  src="/images/retailer-logo.png"
-                />
-                <div className={productStyles.displayCardContainer}>
-                  <div className={productStyles.displayCardContainerDiv1}>
-                    <h5>{product ? product.retailer : null}</h5>
-                    <p>{product ? product.score : null}% Similarity</p>
-                    <div className={productStyles.progressBarContainer}>
-                      <div
-                        style={{
-                          width: `${product ? product.score : null}%`,
-                          backgroundColor:
-                            parseInt(product ? product.score : null) >= 50
-                              ? parseInt(product ? product.score : null) >= 75
-                                ? "#2ecc71"
-                                : "#F1C40F"
-                              : parseInt(product ? product.score : null) >= 25
-                              ? "#E67E22"
-                              : "#E74C3C",
-                        }}
-                        className={retailerProductBoxStyles.progressBarInsert}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className={productStyles.displayCardContainerDiv2}>
-                    <button
-                      className={
-                        productStyles.displayCardContainerButtonPrevious
-                      }
-                      onClick={() => previousRetailer()}
-                    >
-                      Previous Retailer
-                      <BsArrowUp className={productStyles.arrowUpIcon} />
-                    </button>
-                    <br></br>
-                    <button onClick={() => nextRetailer()}>
-                      Next Retailer
-                      <BsArrowDown className={productStyles.arrowUpIcon} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h3 style={{ color: "white" }}>BreadCrumbs</h3>
-            </div>
-            <div className={productStyles.productContainer}>
-              <div className={productStyles.productNamesCard}>
-                  <div>
-                    <h3>Product:</h3>
-                  </div>
-                  <div className={productStyles.productSearch}>
-                    <p>Search here...</p>
-                    <BsSearch />
-                  </div>
-                {products
-                  ? products.map((product) => {
-                      return (
-                        <div className={productStyles.productNames} key={product._id.$oid}>
-                          <button
-                            onClick={() =>
-                              clickRetailer(
-                                product.product,
-                                products.findIndex((object) => {
-                                  return object.product === product.product;
-                                })
-                              )
-                            }
-                          >
-                            {product.product}
-                          </button>
-                        </div>
-                      );
-                    })
-                  : null}
-              </div>
-              <br></br>
-              <div className={productStyles.accordionContainer}>
-                <Accordion
-                  alwaysOpen={false}
-                  style={{ backgroundColor: "white" }}
-                >
-                  {product
-                    ? Object.entries(product.product_brand).map(
-                        ([key, value]) => {
-                          return (
-                            <Accordion.Panel key={key}>
-                              <Accordion.Title>
-                                <div style={{ display: "flex" }}>
-                                  <h3>{key}:</h3>
-                                  <p>overeenkomst: ja/nee</p>
-                                </div>
-                              </Accordion.Title>
-                              <Accordion.Content
-                                style={{ backgroundColor: "white" }}
-                              >
-                                <div style={{ display: "flex" }}>
-                                  <div>
-                                    <h3>Product from WoC</h3>
-                                    <br></br>
-                                    <h6>Text:</h6>
-                                    <br></br>
-                                    <p>{value}</p>
-                                  </div>
-                                  <div>
-                                    <h3>Product from retailer</h3>
-                                    <br></br>
-                                    <h6>Text:</h6>
-                                    <br></br>
-                                    <p>{product.product_scraped[key]}</p>
-                                  </div>
-                                </div>
-                              </Accordion.Content>
-                            </Accordion.Panel>
-                          );
-                        }
-                      )
-                    : <Accordion.Panel><Accordion.Content><h1> Error </h1></Accordion.Content> </Accordion.Panel>}
-                </Accordion>
-              </div>
+          <div className={productStyles.parent}>
+            <PieChartModel
+              model={model}
+              setModel={setModel}
+              currentProduct={currentProduct}
+            />
+            <ProductPageMenu
+              brand={brand}
+              retailer={retailer}
+              product={currentProduct}
+            />
+            <ProductPageProducts
+              currentProducts={currentProducts}
+              currentProduct={currentProduct}
+              setCurrentProduct={setCurrentProduct}
+            />
+            <div className={productStyles.div3}>
+              <button
+                className={productStyles.tab2}
+                style={
+                  active === "Live Score"
+                    ? { backgroundColor: "white", border: "1px solid black" }
+                    : { backgroundColor: "#d8d8d8" }
+                }
+                onClick={() => setActive("Live Score")}
+              >
+                Live Score
+              </button>
+              <button
+                className={productStyles.tab1}
+                style={
+                  active === "Results"
+                    ? { backgroundColor: "white", border: "1px solid black" }
+                    : { backgroundColor: "#d8d8d8" }
+                }
+                onClick={() => setActive("Results")}
+              >
+                Results
+              </button>
+              {currentProduct ? (
+                <>
+                  {currentProduct.history.length >= 1 ? (
+                    <>
+                      {active == "Live Score" ? (
+                        <ProductPageLiveScore
+                          setModel={setModel}
+                          currentProduct={currentProduct}
+                        />
+                      ) : null}
+                      {active == "Results" ? <ProductPageResults /> : null}
+                    </>
+                  ) : (
+                    <h1 className="text-3xl flex h-full w-full items-center justify-center">
+                      Product has no data
+                    </h1>
+                  )}
+                </>
+              ) : (
+                <h1 className="text-3xl flex h-full w-full items-center justify-center">
+                  Select a product
+                </h1>
+              )}
             </div>
           </div>
         )}
@@ -221,33 +145,15 @@ export default function Product({ products, error }) {
 
 export async function getServerSideProps(context) {
   const url = context.req.headers.host;
+  const id = context.query.id;
+  const retailer = context.query.retailer;
+  const product = context.query.product;
 
   try {
     const res = await fetch(
       `http://${url}/api/product?name=${context.query.id}&retailer=${context.query.retailer}`
     );
     let data = await res.json();
-    console.log("Fetched data...");
-    const datametscore = data.data.map((product) => {
-      let goed = 0;
-      Object.entries(product.product_brand).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          if (value.join("") === product.product_scraped[key].join("")) {
-            goed++;
-          }
-        }
-        if (value === product.product_scraped[key]) {
-          goed++;
-        }
-      });
-      product.score = (
-        (goed / Object.keys(product.product_brand).length) *
-        100
-      ).toFixed(2);
-
-      return product;
-    });
-    data.data = datametscore;
 
     if (data.status === "error") {
       return {
@@ -257,12 +163,20 @@ export async function getServerSideProps(context) {
       };
     } else {
       return {
-        props: { products: data.data, error: null },
+        props: {
+          brandServer: id,
+          retailerServer: retailer,
+          productServer: product || null,
+          products: data.data,
+          error: null,
+        },
       };
     }
   } catch (error) {
     return {
-      error: error,
+      props: {
+        error: error.message,
+      },
     };
   }
 }

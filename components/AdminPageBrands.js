@@ -70,12 +70,13 @@ export default function AdminPageBrands({
         <div className={adminSytles.headerboxTotalRetailers}>
           Total Retailers
         </div>
-        <div className={adminSytles.headerboxRetailers}>2 Retailers</div>
+        <div className={adminSytles.headerboxRetailers}>First 2 Retailers</div>
         <div className={adminSytles.headerboxEdit}>Edit</div>
         <div className={adminSytles.headerboxEdit}>Delete</div>
       </div>
       <div className={adminGeneral.retailersbox}>
         {brands.map((brand) => {
+          console.log(brand);
           const retailers = brand.retailers
             .map((retailer) => retailer.name)
             .slice(0, 2)
@@ -87,7 +88,7 @@ export default function AdminPageBrands({
                 <h4 className={adminSytles.brandTitle}>{brand.name}</h4>
               </div>
               <div className={adminSytles.brandboxTotaalRetailers}>
-                {brands.length} Retailers
+                {brand.retailers.length} Retailers
               </div>
               <div className={adminSytles.brandboxRetailers}>{retailers}</div>
               <div className={adminSytles.brandboxEditButton}>
