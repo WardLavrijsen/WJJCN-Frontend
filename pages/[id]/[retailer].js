@@ -18,34 +18,85 @@ export default function Product({
   products,
   error,
 }) {
-  const clickRetailer = (product) => {
-    window.history.pushState(
-      "page2",
-      "Title",
-      `/${router.query.id}/${router.query.retailer}?product=${product}`
-    );
-    setUrlChange(true);
-  };
-
   const [brand, setBrand] = useState(brandServer);
   const [retailer, setRetailer] = useState(retailerServer);
 
+  const allRetailers = [];
+  products.forEach((product) => {
+    if (!allRetailers.includes(product.retailer)) {
+      allRetailers.push(product.retailer);
+    }
+  });
+
   const [currentProducts, setCurrentProducts] = useState(
     products.filter((product) => {
-      return (
-        product.brand === brandServer && product.retailer === retailerServer
-      );
+      return product.retailer === retailerServer;
     })
   );
+
+  // const handleRetailerChange = (retailer) => {
+  //   console.log(retailer);
+  // };
+
   const [currentProduct, setCurrentProduct] = useState(
     products.find((product) => {
       return (
-        product.brand === brandServer &&
-        product.retailer === retailerServer &&
-        product.product === productServer
+        product.retailer === retailerServer && product.product === productServer
       );
     })
   );
+
+  const handleNextRetailer = () => {
+    let nextindex;
+    const index = allRetailers.indexOf(retailer);
+
+    if (index == allRetailers.length - 1) {
+      nextindex = 0;
+    } else {
+      nextindex = index + 1;
+    }
+
+    setRetailer(allRetailers[nextindex]);
+    setCurrentProducts(
+      products.filter((product) => {
+        return product.retailer === allRetailers[nextindex];
+      })
+    );
+
+    setCurrentProduct(null);
+
+    window.history.pushState(
+      "page2",
+      "Title",
+      `/${brand}/${allRetailers[nextindex]}`
+    );
+  };
+
+  const handlePreviousRetailer = () => {
+    let nextindex;
+    const index = allRetailers.indexOf(retailer);
+
+    if (index == 0) {
+      nextindex = allRetailers.length - 1;
+    } else {
+      nextindex = index - 1;
+    }
+
+    setRetailer(allRetailers[nextindex]);
+    setCurrentProducts(
+      products.filter((product) => {
+        return product.retailer === allRetailers[nextindex];
+      })
+    );
+
+    setCurrentProduct(null);
+
+    window.history.pushState(
+      "page2",
+      "Title",
+      `/${brand}/${allRetailers[nextindex]}`
+    );
+  };
 
   const [active, setActive] = useState("Live Score");
   const [model, setModel] = useState(false);
@@ -80,9 +131,12 @@ export default function Product({
               currentProduct={currentProduct}
             />
             <ProductPageMenu
+              currentProducts={currentProducts}
               brand={brand}
               retailer={retailer}
               product={currentProduct}
+              handleNextRetailer={handleNextRetailer}
+              handlePreviousRetailer={handlePreviousRetailer}
             />
             <ProductPageProducts
               currentProducts={currentProducts}
@@ -122,7 +176,9 @@ export default function Product({
                           currentProduct={currentProduct}
                         />
                       ) : null}
-                      {active == "Results" ? <ProductPageResults /> : null}
+                      {active == "Results" ? (
+                        <ProductPageResults product={currentProduct} />
+                      ) : null}
                     </>
                   ) : (
                     <h1 className="text-3xl flex h-full w-full items-center justify-center">

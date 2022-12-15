@@ -4,6 +4,8 @@ import adminGeneral from "../styles/Admin.module.css";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+import { BsFillTrashFill, BsPlusCircle } from "react-icons/bs";
+
 export default function AdminPageRetailers({
   active,
   setActive,
@@ -100,7 +102,7 @@ export default function AdminPageRetailers({
               setRetailers(JSON.parse(JSON.stringify(orgRetailers)));
             }}
           >
-            Add Retailer
+            Add
           </button>
           <button
             style={{ marginRight: "1rem" }}
@@ -207,7 +209,7 @@ export default function AdminPageRetailers({
                   className={adminSytles.DeleteButton}
                   onClick={deleteRetailer.bind(this, retailer._id["$oid"])}
                 >
-                  Delete
+                  <BsFillTrashFill />
                 </button>
               </div>
             </div>

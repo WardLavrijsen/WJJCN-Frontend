@@ -245,6 +245,12 @@ export default function Home({ brands, error, errorStateServer }) {
           style={errorState ? { display: "block" } : { display: "none" }}
         >
           <h3>Error: {getError}</h3>
+          <button
+            className={styles.returnHomeButton}
+            onClick={() => router.push("/")}
+          >
+            Return Home
+          </button>
         </div>
       </main>
     </div>

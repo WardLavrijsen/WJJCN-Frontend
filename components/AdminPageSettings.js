@@ -46,12 +46,10 @@ export default function AdminPageSettings({
 
   const handleSettingsChange = async (e) => {
     e.preventDefault();
-    // console.log(day, scrapeTime);
     const res = await fetch(
       `/api/updatesettings?time=${scrapeTime}&day=${day}&token=${token}`
     );
     const response = await res.json();
-    console.log(response);
     if (response.status === "ok") {
       setError("Settings changed successfully");
       setErrorState(true);

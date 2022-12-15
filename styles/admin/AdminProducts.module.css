@@ -1,0 +1,139 @@
+.selecterBox {
+  width: 100%;
+  height: 12%;
+  border-bottom: 1px solid #3a74e1;
+  display: flex;
+  align-items: center;
+  padding-left: 5%;
+}
+
+.selectBrand {
+  height: 60%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.selectbox {
+  width: 60%;
+  border-radius: 5px;
+}
+
+.SelectOption {
+  height: 60%;
+  width: 100%;
+}
+
+.productHeaderBox {
+  width: 100%;
+  height: 5%;
+  border-bottom: 1px solid #3a74e1;
+  display: flex;
+  padding-left: 5%;
+}
+
+.productHeaderBoxBrand {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.productHeaderBoxRetailer {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.productHeaderBoxProduct {
+  height: 100%;
+  width: 45%;
+  display: flex;
+  align-items: center;
+}
+
+.productHeaderBoxEdit {
+  height: 100%;
+  width: 15%;
+  display: flex;
+  align-items: center;
+}
+
+.productsBox {
+  width: 100%;
+  height: 63%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 0 0 31px 31px;
+}
+
+.productBox {
+  width: 100%;
+  height: 9vh;
+  border-bottom: 1px solid #3a74e1;
+  display: flex;
+  padding-left: 5%;
+}
+
+.productsBox::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+.productsBox::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 100px;
+  border: solid 2px var(--main-blue);
+  margin-bottom: 20px;
+}
+
+/* Handle */
+.productsBox::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 100px;
+  border: solid 2px var(--main-blue);
+}
+
+/* Handle on hover */
+.productsBox::-webkit-scrollbar-thumb:hover {
+  background: #c8c8c8;
+  border-radius: 100px;
+}
+
+.productBoxBrand {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.productBoxRetailer {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.productBoxProduct {
+  height: 100%;
+  width: 45%;
+  display: flex;
+  align-items: center;
+}
+
+.productBoxEdit {
+  height: 100%;
+  width: 15%;
+  display: flex;
+  align-items: center;
+}
+
+.EditButton {
+  background-color: #3a74e1;
+  padding: 0.6vw 1.2vw;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+}

@@ -10,7 +10,6 @@
 
 .div1 {
   grid-area: 1 / 1 / 2 / 2;
-  overflow: hidden;
 }
 .div2 {
   grid-area: 1 / 2 / 2 / 4;

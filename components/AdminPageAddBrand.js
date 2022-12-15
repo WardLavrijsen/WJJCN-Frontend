@@ -16,7 +16,6 @@ export default function AdminPageAddRetailer({
 }) {
   const handleAddBrand = async (e) => {
     e.preventDefault();
-    console.log(e.target[0].value);
     const retailers = [];
     Array.from(e.target.elements).forEach((element) => {
       if (element.type === "checkbox") {
@@ -36,6 +35,14 @@ export default function AdminPageAddRetailer({
     });
 
     if (response.status === 200) {
+      const data = await response.json();
+      const newBrand = {
+        _id: data.data,
+        name: e.target[0].value,
+        retailers: retailers,
+      };
+
+      setBrands([...brands, newBrand]);
       setError("Brand is added!");
       setErrorState(true);
       setErrorColor("#27ae60");

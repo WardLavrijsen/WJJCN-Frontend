@@ -53,7 +53,7 @@ export default function AdminPageScraper({
               }
               return (
                 <div
-                  key={retailer.retailer}
+                  key={retailer._id["$oid"]}
                   className={adminGeneral.retailerbox}
                 >
                   <div className={adminSytles.scraperboxStatus}>

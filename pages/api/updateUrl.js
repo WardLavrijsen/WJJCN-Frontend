@@ -6,16 +6,18 @@ export default async function login(req, res) {
   const body = JSON.parse(req.body);
   try {
     const resonse = await axios({
-      method: "delete",
-      url: `${process.env.API_URL}/retailer`,
+      method: "put",
+      url: `${process.env.API_URL}/reportedproduct`,
       data: {
-        id: body.id,
+        product: body.product,
         token: body.token,
       },
       headers: {
         "x-api-key": process.env.API_KEY,
       },
     });
+
+    res.status(200).json({ status: "ok", data: resonse.data });
   } catch (error) {
     console.log(error);
     res.status(400).json({ status: "error", message: error.message });

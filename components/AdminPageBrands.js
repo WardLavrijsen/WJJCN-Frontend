@@ -1,8 +1,7 @@
 import adminSytles from "../styles/admin/AdminBrands.module.css";
 import adminGeneral from "../styles/Admin.module.css";
 
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { BsFillTrashFill, BsPencilSquare } from "react-icons/bs";
 
 export default function AdminPageBrands({
   active,
@@ -60,7 +59,7 @@ export default function AdminPageBrands({
               setActive("addBrand");
             }}
           >
-            Add Brand
+            Add
           </button>
         </div>
       </div>
@@ -76,7 +75,6 @@ export default function AdminPageBrands({
       </div>
       <div className={adminGeneral.retailersbox}>
         {brands.map((brand) => {
-          console.log(brand);
           const retailers = brand.retailers
             .map((retailer) => retailer.name)
             .slice(0, 2)
@@ -92,14 +90,16 @@ export default function AdminPageBrands({
               </div>
               <div className={adminSytles.brandboxRetailers}>{retailers}</div>
               <div className={adminSytles.brandboxEditButton}>
-                <button className={adminSytles.EditButton}>Edit</button>
+                <button className={adminSytles.EditButton}>
+                  <BsPencilSquare />
+                </button>
               </div>
               <div className={adminSytles.brandboxEditButton}>
                 <button
                   className={adminSytles.DeleteButton}
                   onClick={deleteBrand.bind(this, brand._id["$oid"])}
                 >
-                  Delete
+                  <BsFillTrashFill />
                 </button>
               </div>
             </div>

@@ -8,6 +8,8 @@ import AdminPageScraper from "../components/AdminPageScraper";
 import AdminPageAddRetailer from "../components/AdminPageAddRetailer";
 import AdminPageBrands from "../components/AdminPageBrands";
 import AdminPageAddBrand from "../components/AdminPageAddBrand";
+import AdminPageProducts from "../components/AdminPageProducts";
+import AdminPageEditProduct from "../components/AdminPageEditProduct";
 
 import { useState, useEffect } from "react";
 
@@ -21,6 +23,7 @@ export default function Home({
   date,
   time,
   brandsServer,
+  products,
 }) {
   const [active, setActive] = useState("brands");
 
@@ -28,6 +31,8 @@ export default function Home({
   const [brands, setBrands] = useState(brandsServer);
 
   const [errorForErrorPage, setErrorForErrorPage] = useState("");
+
+  const [selectedProduct, setSelectedProduct] = useState({});
 
   const [getError, setError] = useState(error);
   const [errorState, setErrorState] = useState(errorStateServer);
@@ -91,6 +96,17 @@ export default function Home({
               >
                 Scraper
               </button>
+              <button
+                className={adminSytles.tab4}
+                style={
+                  active === "products"
+                    ? { backgroundColor: "white", border: "1px solid black" }
+                    : { backgroundColor: "#d8d8d8" }
+                }
+                onClick={() => setActive("products")}
+              >
+                Products
+              </button>
               <AdminPageBrands
                 setActive={setActive}
                 active={active}
@@ -118,6 +134,21 @@ export default function Home({
                 active={active}
                 setActive={setActive}
                 setErrorForErrorPage={setErrorForErrorPage}
+              />
+              <AdminPageProducts
+                setActive={setActive}
+                active={active}
+                products={products}
+                setSelectedProduct={setSelectedProduct}
+              />
+              <AdminPageEditProduct
+                active={active}
+                setActive={setActive}
+                token={token}
+                setError={setError}
+                setErrorState={setErrorState}
+                setErrorColor={setErrorColor}
+                selectedProduct={selectedProduct}
               />
               <div
                 className={adminSytles.infobox}
@@ -204,6 +235,9 @@ export async function getServerSideProps(context) {
       `http://${url}/api/getadminpagecontent?token=${context.query.token}`
     );
     const AllData = await AllRes.json();
+
+    console.log(AllData);
+
     const retailers = AllData.data.allRetailers.map((r) => {
       r.scrape = r.scrape === "true" ? true : false;
       return r;
@@ -225,6 +259,7 @@ export async function getServerSideProps(context) {
           date: AllData.data.allAdminSettings[0].day_to_scrape,
           time: AllData.data.allAdminSettings[0].time_to_scrape,
           logs: AllData.data.allLogs.reverse(),
+          products: AllData.data.allProductsArray,
           token: context.query.token,
           retailersServer: retailers,
           orgRetailers: orgRetailers,

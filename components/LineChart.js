@@ -1,7 +1,7 @@
 import { ResponsiveLine } from "@nivo/line";
 
 export default function LineChart({ currentProduct }) {
-  const graphData = currentProduct.history.map((item, index) => {
+  const graphData = currentProduct.history.slice(-10).map((item, index) => {
     return {
       x: item.scrape_date + "-" + (index + 1),
       y: item.score,
