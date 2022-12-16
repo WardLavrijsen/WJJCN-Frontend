@@ -33,7 +33,7 @@
 
 .settingsInput {
   border: solid 3px #3a74e1;
-  border-radius: 18px;
+  border-radius: 5px;
   display: block;
   width: 80%;
   max-width: 80%;
@@ -45,7 +45,7 @@
   background-color: #3a74e1;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  border-radius: 18px;
+  border-radius: 5px;
   display: block;
   width: 80%;
   max-width: 80%;

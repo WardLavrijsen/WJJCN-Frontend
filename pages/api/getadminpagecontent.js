@@ -5,7 +5,7 @@ import axios from "axios";
 export default async function adminpage(req, res) {
   try {
     const resonse = await axios.get(
-      `${process.env.API_URL}/get_admin_dashboard`,
+      `${process.env.API_URL}/getadmindashboard`,
       {
         headers: {
           "x-api-key": process.env.API_KEY,

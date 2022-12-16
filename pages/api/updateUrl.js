@@ -3,18 +3,23 @@
 import axios from "axios";
 
 export default async function login(req, res) {
+  const body = JSON.parse(req.body);
   try {
-    const resonse = await axios.get(`${process.env.API_URL}/get_all_logs`, {
+    const resonse = await axios({
+      method: "put",
+      url: `${process.env.API_URL}/reportedproduct`,
+      data: {
+        product: body.product,
+        token: body.token,
+      },
       headers: {
         "x-api-key": process.env.API_KEY,
-      },
-      data: {
-        token: req.query.token,
       },
     });
 
     res.status(200).json({ status: "ok", data: resonse.data });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ status: "error", message: error.message });
   }
 }

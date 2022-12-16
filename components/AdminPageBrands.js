@@ -1,8 +1,7 @@
 import adminSytles from "../styles/admin/AdminBrands.module.css";
 import adminGeneral from "../styles/Admin.module.css";
 
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { BsFillTrashFill, BsPencilSquare } from "react-icons/bs";
 
 export default function AdminPageBrands({
   active,
@@ -60,7 +59,7 @@ export default function AdminPageBrands({
               setActive("addBrand");
             }}
           >
-            Add Brand
+            Add
           </button>
         </div>
       </div>
@@ -70,7 +69,7 @@ export default function AdminPageBrands({
         <div className={adminSytles.headerboxTotalRetailers}>
           Total Retailers
         </div>
-        <div className={adminSytles.headerboxRetailers}>2 Retailers</div>
+        <div className={adminSytles.headerboxRetailers}>First 2 Retailers</div>
         <div className={adminSytles.headerboxEdit}>Edit</div>
         <div className={adminSytles.headerboxEdit}>Delete</div>
       </div>
@@ -87,18 +86,20 @@ export default function AdminPageBrands({
                 <h4 className={adminSytles.brandTitle}>{brand.name}</h4>
               </div>
               <div className={adminSytles.brandboxTotaalRetailers}>
-                {brands.length} Retailers
+                {brand.retailers.length} Retailers
               </div>
               <div className={adminSytles.brandboxRetailers}>{retailers}</div>
               <div className={adminSytles.brandboxEditButton}>
-                <button className={adminSytles.EditButton}>Edit</button>
+                <button className={adminSytles.EditButton}>
+                  <BsPencilSquare />
+                </button>
               </div>
               <div className={adminSytles.brandboxEditButton}>
                 <button
                   className={adminSytles.DeleteButton}
                   onClick={deleteBrand.bind(this, brand._id["$oid"])}
                 >
-                  Delete
+                  <BsFillTrashFill />
                 </button>
               </div>
             </div>

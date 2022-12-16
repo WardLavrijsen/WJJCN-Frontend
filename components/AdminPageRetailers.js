@@ -4,6 +4,8 @@ import adminGeneral from "../styles/Admin.module.css";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+import { BsFillTrashFill, BsPlusCircle } from "react-icons/bs";
+
 export default function AdminPageRetailers({
   active,
   setActive,
@@ -18,6 +20,8 @@ export default function AdminPageRetailers({
   setRetailers,
 }) {
   const router = useRouter();
+
+  const [activeInput, setActiveInput] = useState("");
 
   const updateRetailers = async () => {
     const response = await fetch("/api/updateretailers", {
@@ -98,7 +102,7 @@ export default function AdminPageRetailers({
               setRetailers(JSON.parse(JSON.stringify(orgRetailers)));
             }}
           >
-            Add Retailer
+            Add
           </button>
           <button
             style={{ marginRight: "1rem" }}
@@ -141,28 +145,63 @@ export default function AdminPageRetailers({
                 />
               </div>
               <div className={adminSytles.retailerboxName}>
-                <input
-                  value={retailer.name}
-                  className={adminSytles.retailerboxNameInput}
-                  type="text"
-                  onChange={(e) => {
-                    const newRetailers = [...retailers];
-                    newRetailers[index].name = e.target.value;
-                    setRetailers(newRetailers);
-                  }}
-                />
+                {activeInput == retailer._id["$oid"] + retailer.name ? (
+                  <input
+                    value={retailer.name}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        setActiveInput("");
+                      }
+                    }}
+                    className={adminSytles.retailerboxNameInput}
+                    type="text"
+                    onChange={(e) => {
+                      const newRetailers = [...retailers];
+                      newRetailers[index].name = e.target.value;
+                      setRetailers(newRetailers);
+                    }}
+                  />
+                ) : (
+                  <h1
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      setActiveInput(retailer._id["$oid"] + retailer.name)
+                    }
+                  >
+                    {retailer.name}
+                  </h1>
+                )}
               </div>
               <div className={adminSytles.retailerboxUrl}>
-                <input
-                  value={retailer.url_to_scrape}
-                  className={adminSytles.retailerboxNameInput}
-                  type="text"
-                  onChange={(e) => {
-                    const newRetailers = [...retailers];
-                    newRetailers[index].url_to_scrape = e.target.value;
-                    setRetailers(newRetailers);
-                  }}
-                />
+                {activeInput ==
+                retailer._id["$oid"] + retailer.url_to_scrape ? (
+                  <input
+                    value={retailer.url_to_scrape}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        setActiveInput("");
+                      }
+                    }}
+                    className={adminSytles.retailerboxNameInput}
+                    type="text"
+                    onChange={(e) => {
+                      const newRetailers = [...retailers];
+                      newRetailers[index].url_to_scrape = e.target.value;
+                      setRetailers(newRetailers);
+                    }}
+                  />
+                ) : (
+                  <h1
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      setActiveInput(
+                        retailer._id["$oid"] + retailer.url_to_scrape
+                      )
+                    }
+                  >
+                    {retailer.url_to_scrape}
+                  </h1>
+                )}
               </div>
 
               <div className={adminSytles.retailerboxDelete}>
@@ -170,7 +209,7 @@ export default function AdminPageRetailers({
                   className={adminSytles.DeleteButton}
                   onClick={deleteRetailer.bind(this, retailer._id["$oid"])}
                 >
-                  Delete
+                  <BsFillTrashFill />
                 </button>
               </div>
             </div>

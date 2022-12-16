@@ -36,9 +36,9 @@ export default function Home({}) {
             />
           </Link>
           <h1 className={styles.fourTitle}>404</h1>
-          <h2 className={styles.fourUnderTitle}>Pagina niet gevonden</h2>
+          <h2 className={styles.fourUnderTitle}>Page not found!</h2>
           <Link href="/">
-            <h1 className={styles.fourLink}>Home Pagina</h1>
+            <h1 className={styles.fourLink}>Home Page</h1>
           </Link>
         </div>
       </main>

@@ -52,6 +52,7 @@
   border-radius: 8px 8px 0 0;
   top: 0;
   left: 4%;
+  padding: 2px;
 }
 
 .tab2 {
@@ -63,6 +64,7 @@
   width: 12%;
   font-size: 1.1rem;
   border-radius: 8px 8px 0 0;
+  padding: 2px;
 }
 
 .tab3 {
@@ -74,6 +76,19 @@
   width: 12%;
   font-size: 1.1rem;
   border-radius: 8px 8px 0 0;
+  padding: 2px;
+}
+
+.tab4 {
+  top: 0;
+  left: 43%;
+  position: absolute;
+  transform: translateY(-100%);
+  text-align: center;
+  width: 12%;
+  font-size: 1.1rem;
+  border-radius: 8px 8px 0 0;
+  padding: 2px;
 }
 
 .infobox {
@@ -114,6 +129,31 @@
   border-bottom: 1px solid #3a74e1;
   display: flex;
   padding-left: 5%;
+}
+
+.retailersbox::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+.retailersbox::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 100px;
+  border: solid 2px var(--main-blue);
+  margin-bottom: 20px;
+}
+
+/* Handle */
+.retailersbox::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 100px;
+  border: solid 2px var(--main-blue);
+}
+
+/* Handle on hover */
+.retailersbox::-webkit-scrollbar-thumb:hover {
+  background: #c8c8c8;
+  border-radius: 100px;
 }
 
 .checkbox {

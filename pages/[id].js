@@ -212,25 +212,29 @@ export default function Home({ brands, error, errorStateServer }) {
               })}
             </div>
             <div className={gridStyles.div3}>
-              {pageNumber >= 1 ? (
-                <button
-                  onClick={() => setPage(pageNumber - 1)}
-                  className={gridStyles.pageCircleDiv}
-                >
-                  {"<"}
-                </button>
-              ) : null}
+              {pages > 1 ? (
+                <>
+                  {pageNumber >= 1 ? (
+                    <button
+                      onClick={() => setPage(pageNumber - 1)}
+                      className={gridStyles.pageCircleDiv}
+                    >
+                      {"<"}
+                    </button>
+                  ) : null}
 
-              <div className={gridStyles.activePageCircleDiv}>
-                {pageNumber + 1}
-              </div>
-              {pageNumber < pages ? (
-                <button
-                  onClick={() => setPage(pageNumber + 1)}
-                  className={gridStyles.pageCircleDiv}
-                >
-                  {">"}
-                </button>
+                  <div className={gridStyles.activePageCircleDiv}>
+                    {pageNumber + 1}
+                  </div>
+                  {pageNumber < pages ? (
+                    <button
+                      onClick={() => setPage(pageNumber + 1)}
+                      className={gridStyles.pageCircleDiv}
+                    >
+                      {">"}
+                    </button>
+                  ) : null}
+                </>
               ) : null}
             </div>
           </div>
@@ -241,6 +245,12 @@ export default function Home({ brands, error, errorStateServer }) {
           style={errorState ? { display: "block" } : { display: "none" }}
         >
           <h3>Error: {getError}</h3>
+          <button
+            className={styles.returnHomeButton}
+            onClick={() => router.push("/")}
+          >
+            Return Home
+          </button>
         </div>
       </main>
     </div>
@@ -258,7 +268,7 @@ export async function getServerSideProps(context) {
     if (data.data.errorMessage) {
       return {
         props: {
-          error: data.data.errorMessage,
+          error: "No retailers found",
           errorStateServer: true,
         },
       };
@@ -266,7 +276,7 @@ export async function getServerSideProps(context) {
       if (data.data.length == 0) {
         return {
           props: {
-            error: "Geen brand gevonden",
+            error: "No retailers found",
             errorStateServer: true,
           },
         };

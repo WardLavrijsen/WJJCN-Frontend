@@ -7,7 +7,7 @@ export default async function login(req, res) {
   try {
     const resonse = await axios({
       method: "post",
-      url: `${process.env.API_URL}/add_retailer`,
+      url: `${process.env.API_URL}/retailer`,
       data: {
         scrape: body.scrape,
         name: body.name,

@@ -7,7 +7,7 @@ export default async function login(req, res) {
   try {
     const resonse = await axios({
       method: "delete",
-      url: `${process.env.API_URL}/delete_brand`,
+      url: `${process.env.API_URL}/brand`,
       data: {
         id: body.id,
         token: body.token,

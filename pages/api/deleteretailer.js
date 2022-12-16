@@ -7,7 +7,7 @@ export default async function login(req, res) {
   try {
     const resonse = await axios({
       method: "delete",
-      url: `${process.env.API_URL}/delete_retailer`,
+      url: `${process.env.API_URL}/retailer`,
       data: {
         id: body.id,
         token: body.token,
@@ -16,8 +16,6 @@ export default async function login(req, res) {
         "x-api-key": process.env.API_KEY,
       },
     });
-
-    res.status(200).json({ status: "ok", data: resonse.data });
   } catch (error) {
     console.log(error);
     res.status(400).json({ status: "error", message: error.message });

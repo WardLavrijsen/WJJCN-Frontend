@@ -18,4 +18,20 @@
   background-color: #ffffff;
   padding: 0.5rem 0rem;
   width: 12.3vw;
+  border-radius: 5px;
+}
+
+.statusButtons:last-child {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.statusButtons:hover {
+  transition: background-color 0.3s;
+  background-color: #eeef;
+}
+
+.statusButtons:last-child:hover {
+  transition: background-color 0.3s;
+  background-color: #e3301e;
 }
