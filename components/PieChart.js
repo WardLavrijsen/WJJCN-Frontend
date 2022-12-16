@@ -11,7 +11,7 @@ export default function PieChart({ score }) {
       : "#E74C3C";
 
   const commonProperties = {
-    margin: { left: 20, right: 20, top: 20, bottom: 20 },
+    margin: { left: 10, right: 10, top: 20, bottom: 10 },
     data: [
       { id: "Score", label: "Score", value: score, color: scoreColor },
       { id: "", label: "", value: 100 - score, color: "#ecf0f1" },

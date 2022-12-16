@@ -236,8 +236,6 @@ export async function getServerSideProps(context) {
     );
     const AllData = await AllRes.json();
 
-    console.log(AllData);
-
     const retailers = AllData.data.allRetailers.map((r) => {
       r.scrape = r.scrape === "true" ? true : false;
       return r;
