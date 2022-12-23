@@ -6,22 +6,20 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 // import productStyles from "../styles/product/Product.module.css";s
 import productsStyles from "../styles/product/ProductResults.module.css";
 
-const arrayToString = (array) => {
-  return (
-    <ul className={productsStyles.compareValues}>
-      {array.map((el) => {
-        return (
-          <li className={productsStyles.liel} key={el}>
-            {el}
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-
 export default function ProductPageResults({ product }) {
-  const [show, setShow] = useState("");
+  const [show, setShow] = useState(
+    Object.entries(product.history[product.history.length - 1].product_scraped)
+      .map(([key, value]) => {
+        if (value.score < 75) {
+          return key;
+        } else {
+          return null;
+        }
+      })
+      .filter((item) => {
+        return item != null;
+      })
+  );
 
   return (
     <div className={productsStyles.allatributes}>
@@ -63,17 +61,17 @@ export default function ProductPageResults({ product }) {
                 </h1>
                 <button
                   onClick={() => {
-                    if (show === key) {
-                      setShow("");
+                    if (show.includes(key)) {
+                      setShow(show.filter((el) => el !== key));
                     } else {
-                      setShow(key);
+                      setShow([...show, key]);
                     }
                   }}
                   className={productsStyles.arrowDownButton}
                 >
                   <MdOutlineKeyboardArrowDown
                     style={
-                      show == key
+                      show.includes(key)
                         ? { transform: "rotate(180deg)" }
                         : { transform: "rotate(0deg)" }
                     }
@@ -82,7 +80,7 @@ export default function ProductPageResults({ product }) {
                 </button>
               </div>
             </div>
-            {show === key ? (
+            {show.includes(key) ? (
               <div className={productsStyles.openItem}>
                 <div className={productsStyles.titleBox}>
                   <h1 className={productsStyles.itemTitle}>
