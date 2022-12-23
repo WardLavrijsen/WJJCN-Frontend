@@ -1,32 +1,10 @@
 import { ResponsiveBar } from "@nivo/bar";
 
 export default function BarChart({ currentProduct }) {
-  const items = {};
-  currentProduct.history.map((item, index) => {
-    Object.entries(item.product_scraped).forEach(([key, value]) => {
-      if (items[key]) {
-        items[key].total += 1;
-        if (value.equal_to_scraped) {
-          items[key].true += 1;
-        }
-      } else {
-        if (value.equal_to_scraped) {
-          items[key] = {
-            total: 1,
-            true: 1,
-          };
-        } else {
-          items[key] = {
-            total: 1,
-            true: 0,
-          };
-        }
-      }
-    });
-  });
-
-  const graphData = Object.entries(items).map(([key, value]) => {
-    const score = Math.round((value.true / value.total) * 100);
+  const graphData = Object.entries(
+    currentProduct.history[currentProduct.history.length - 1].product_scraped
+  ).map(([key, value]) => {
+    const score = value.score;
     const scoreColor =
       score >= 50
         ? score >= 75
@@ -38,7 +16,7 @@ export default function BarChart({ currentProduct }) {
 
     return {
       element: key,
-      "Found (%)": score,
+      "Found (%)": score.toFixed(2),
       color: scoreColor,
     };
   });
