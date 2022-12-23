@@ -3,6 +3,8 @@ import styles from "../styles/Home.module.css";
 import gridStyles from "../styles/Grid.module.css";
 import cardStyles from "../styles/RetailerProductBox.module.css";
 
+import stringSimilarity from "string-similarity";
+
 import { Card } from "flowbite-react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -281,15 +283,64 @@ export async function getServerSideProps(context) {
           },
         };
       } else {
+        console.log(data.data);
+        const test = data.data.map((retailer) => {
+          const newProducts = retailer.products.map((product) => {
+            product.history = product.history.map((history) => {
+              const scoreArray = [];
+              const newProductScraped = {};
+              Object.entries(history.product_scraped).map(([key, value]) => {
+                const score = Array.isArray(value.text)
+                  ? stringSimilarity.compareTwoStrings(
+                      value.text.join("").toLowerCase(),
+                      history.product_brand[key].join("").toLowerCase()
+                    ) * 100
+                  : stringSimilarity.compareTwoStrings(
+                      value.text.toLowerCase(),
+                      history.product_brand[key].toLowerCase()
+                    ) * 100;
+                scoreArray.push(score);
+                newProductScraped[key] = {
+                  text: value.text,
+                  score,
+                };
+              });
+              history.product_scraped = newProductScraped;
+              const score = scoreArray.reduce((a, b) => a + b, 0);
+              const length = scoreArray.length;
+              history.score = parseInt((score / length).toFixed(0));
+              return history;
+            });
+            // product.score = product.history[product.history.length - 1].score;
+            if (product.history.length > 0) {
+              return {
+                name: product.name,
+                score: product.history[product.history.length - 1].score,
+              };
+            } else {
+              return {
+                name: product.name,
+                score: 0,
+              };
+            }
+
+            return product;
+          });
+          retailer.products = newProducts;
+        });
+
         return {
           props: { brands: data.data, error: null, errorStateServer: false },
         };
       }
     }
   } catch (error) {
+    console.log(error);
     return {
-      error: error,
-      errorStateServer: true,
+      props: {
+        error: error,
+        errorStateServer: true,
+      },
     };
   }
 }
