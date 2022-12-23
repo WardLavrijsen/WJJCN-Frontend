@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 
 import productStyles from "../../styles/product/Product.module.css";
 
+import stringSimilarity from "string-similarity";
+
 import ProductPageMenu from "../../components/ProductPageMenu";
 import ProductPageProducts from "../../components/ProductPageProducts";
 import ProductPageResults from "../../components/ProductPageResults";
@@ -22,16 +24,20 @@ export default function Product({
   const [retailer, setRetailer] = useState(retailerServer);
 
   const allRetailers = [];
-  products.forEach((product) => {
-    if (!allRetailers.includes(product.retailer)) {
-      allRetailers.push(product.retailer);
-    }
-  });
+  if (!error) {
+    products.forEach((product) => {
+      if (!allRetailers.includes(product.retailer)) {
+        allRetailers.push(product.retailer);
+      }
+    });
+  }
 
   const [currentProducts, setCurrentProducts] = useState(
-    products.filter((product) => {
-      return product.retailer === retailerServer;
-    })
+    error
+      ? null
+      : products.filter((product) => {
+          return product.retailer === retailerServer;
+        })
   );
 
   // const handleRetailerChange = (retailer) => {
@@ -39,11 +45,14 @@ export default function Product({
   // };
 
   const [currentProduct, setCurrentProduct] = useState(
-    products.find((product) => {
-      return (
-        product.retailer === retailerServer && product.product === productServer
-      );
-    })
+    error
+      ? null
+      : products.find((product) => {
+          return (
+            product.retailer === retailerServer &&
+            product.product === productServer
+          );
+        })
   );
 
   const handleNextRetailer = () => {
@@ -218,17 +227,52 @@ export async function getServerSideProps(context) {
         },
       };
     } else {
+      const products = data.data.map((product) => {
+        product.history = product.history.map((history) => {
+          const scoreArray = [];
+          const newProductScraped = {};
+          Object.entries(history.product_scraped).map(([key, value]) => {
+            const score = Array.isArray(value.text)
+              ? stringSimilarity.compareTwoStrings(
+                  value.text.join("").toLowerCase(),
+                  history.product_brand[key].join("").toLowerCase()
+                ) * 100
+              : stringSimilarity.compareTwoStrings(
+                  value.text.toLowerCase(),
+                  history.product_brand[key].toLowerCase()
+                ) * 100;
+
+            scoreArray.push(score);
+
+            newProductScraped[key] = {
+              text: value.text,
+              score,
+            };
+          });
+
+          history.product_scraped = newProductScraped;
+          const score = scoreArray.reduce((a, b) => a + b, 0);
+          const length = scoreArray.length;
+
+          history.score = parseInt((score / length).toFixed(0));
+
+          return history;
+        });
+        return product;
+      });
+
       return {
         props: {
           brandServer: id,
           retailerServer: retailer,
           productServer: product || null,
-          products: data.data,
+          products: products,
           error: null,
         },
       };
     }
   } catch (error) {
+    console.log(error);
     return {
       props: {
         error: error.message,

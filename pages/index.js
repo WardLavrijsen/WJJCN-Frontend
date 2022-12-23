@@ -98,7 +98,7 @@ export default function Home({ brandData, error, errorStateServer }) {
           router.push("/" + brand);
         } else {
           setErrorState(true);
-          setError("Brand Staat niet in de database!");
+          setError("Brand not found!");
 
           setTimeout(() => {
             setErrorState(false);
@@ -117,7 +117,7 @@ export default function Home({ brandData, error, errorStateServer }) {
           router.push("/" + brand);
         } else {
           setErrorState(true);
-          setError("Brand Staat niet in de database!");
+          setError("Brand not found!");
 
           setTimeout(() => {
             setErrorState(false);
@@ -263,7 +263,7 @@ export async function getServerSideProps(context) {
     if (data.status === "error") {
       return {
         props: {
-          error: "Data kan niet opgehaald worden",
+          error: "Something went wrong",
           errorStateServer: true,
         },
       };

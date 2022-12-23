@@ -12,7 +12,7 @@ export default function AdminPageSettings({
 }) {
   const router = useRouter();
 
-  const [frequency, setFrequency] = useState("");
+  const [frequency, setFrequency] = useState("Monthly");
   const [specifiteDate, setSpecifiteDate] = useState("");
 
   const [day, setDay] = useState(date);
