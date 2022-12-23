@@ -92,9 +92,7 @@ export default function Home({ brands, error, errorStateServer }) {
   const [getError, setError] = useState(error);
   const [errorState, setErrorState] = useState(errorStateServer);
 
-  const clickLink = (e) => {
-    console.log(input);
-  };
+  const clickLink = (e) => {};
 
   const setPage = (page) => {
     const start = page * 4;
@@ -283,7 +281,6 @@ export async function getServerSideProps(context) {
           },
         };
       } else {
-        console.log(data.data);
         const test = data.data.map((retailer) => {
           const newProducts = retailer.products.map((product) => {
             product.history = product.history.map((history) => {
