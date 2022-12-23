@@ -8,7 +8,7 @@ import productsStyles from "../styles/product/ProductResults.module.css";
 
 const arrayToString = (array) => {
   return (
-    <ul>
+    <ul className={productsStyles.compareValues}>
       {array.map((el) => {
         return (
           <li className={productsStyles.liel} key={el}>
@@ -32,24 +32,34 @@ export default function ProductPageResults({ product }) {
           <>
             <div key={key} className={productsStyles.atribute}>
               <div>
-                <h1 className={productsStyles.ProductTitle}>{key}</h1>
+                <h1 className={productsStyles.ProductTitle}>
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                </h1>
               </div>
               <div className={productsStyles.backdiv}>
                 <h1
                   style={{
-                    backgroundColor: value.equal_to_scraped
-                      ? "#2ECC71"
-                      : value.text == "Not found"
-                      ? "#E74C3C"
-                      : "#E67E22",
+                    backgroundColor:
+                      value.score >= 50
+                        ? value.score >= 75
+                          ? "#2ecc71"
+                          : "#F1C40F"
+                        : value.score >= 25
+                        ? "#E67E22"
+                        : "#E74C3C",
                   }}
                   className={productsStyles.scorePoint}
                 >
-                  {value.equal_to_scraped
-                    ? "Correct"
-                    : value.text == "Not found"
-                    ? "Not found"
-                    : "Not correct"}
+                  {value.score.toFixed(2)}%
+                </h1>
+                <h1
+                  style={{
+                    backgroundColor:
+                      value.text == "Not found" ? "#E74C3C" : "#2ECC71",
+                  }}
+                  className={productsStyles.scorePoint}
+                >
+                  {value.text == "Not found" ? "Not Found" : "Found"}
                 </h1>
                 <button
                   onClick={() => {
@@ -83,24 +93,46 @@ export default function ProductPageResults({ product }) {
                       product.history[product.history.length - 1].product_brand[
                         key
                       ]
-                    )
-                      ? arrayToString(
-                          product.history[product.history.length - 1]
-                            .product_brand[key]
-                        )
-                      : product.history[product.history.length - 1]
-                          .product_brand[key]}
+                    ) ? (
+                      <>
+                        {product.history[
+                          product.history.length - 1
+                        ].product_brand[key].map((el, index) => {
+                          return (
+                            <p
+                              key={el}
+                              className={productsStyles.compareValues}
+                            >
+                              {index + 1}. {el}
+                            </p>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      product.history[product.history.length - 1].product_brand[
+                        key
+                      ]
+                    )}
                   </p>
                 </div>
                 <div className={productsStyles.titleBox}>
                   <h1 className={productsStyles.itemTitle}>
                     Scraped from website:
                   </h1>
-                  <p className={productsStyles.compareValues}>
-                    {Array.isArray(value.text)
-                      ? arrayToString(value.text)
-                      : value.text}
-                  </p>
+
+                  {Array.isArray(value.text) ? (
+                    <>
+                      {value.text.map((el, index) => {
+                        return (
+                          <p key={el} className={productsStyles.compareValues}>
+                            {index + 1}. {el}
+                          </p>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <p className={productsStyles.compareValues}>{value.text}</p>
+                  )}
                 </div>
               </div>
             ) : null}
