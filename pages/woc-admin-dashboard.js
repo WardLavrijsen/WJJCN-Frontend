@@ -60,6 +60,10 @@ export default function Home({
             errorState={errorState}
             errorMessage={getError}
             errorColor={errorColor}
+            token={token}
+            setError={setError}
+            setErrorState={setErrorState}
+            setErrorColor={setErrorColor}
           />
           <div className={adminSytles.div2}>
             <div className={adminSytles.displayCard}>
