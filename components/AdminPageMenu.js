@@ -9,8 +9,29 @@ export default function AdminPageMenu({
   errorState,
   errorMessage,
   errorColor,
+  setError,
+  setErrorState,
+  setErrorColor,
+  token,
 }) {
   const router = useRouter();
+
+  const handleScrapeNow = async () => {
+    const response = await fetch("/api/scrapenow", {
+      method: "POST",
+      body: JSON.stringify({
+        token: token,
+      }),
+    });
+    const data = await response.json();
+    setError("Sraper has started!");
+    setErrorState(true);
+    setErrorColor("#27ae60");
+    setTimeout(() => {
+      setErrorState(false);
+    }, 3000);
+  };
+
   const logout = () => {
     router.push("/woc-admin");
   };
@@ -35,8 +56,9 @@ export default function AdminPageMenu({
         />
       </Link>
       <div className={adminSytles.buttonLinks}>
-        <button className={adminSytles.statusButtons}>Strart Scraper</button>
-        <button className={adminSytles.statusButtons}>Stop Scraper</button>
+        <button onClick={handleScrapeNow} className={adminSytles.statusButtons}>
+          Strart Scraper
+        </button>
         <button onClick={logout} className={adminSytles.statusButtons}>
           Log Out!
         </button>
